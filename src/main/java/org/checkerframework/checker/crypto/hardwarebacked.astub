@@ -1,0 +1,18 @@
+package javax.crypto;
+
+import org.checkerframework.checker.crypto.qual.AllowedAlgorithms;
+import org.checkerframework.checker.crypto.qual.AllowedProviders;
+
+class KeyGenerator {
+    static KeyGenerator getInstance(@AllowedAlgorithms({"AES", "HmacSHA(1|224|256|384|512)", "DESede"}) String arg0);
+    static KeyGenerator getInstance(@AllowedAlgorithms({"AES", "HmacSHA(1|224|256|384|512)", "DESede"}) String arg0, @AllowedProviders({"AndroidKeyStore"}) String arg1);
+    static KeyGenerator getInstance(@AllowedAlgorithms({"AES", "HmacSHA(1|224|256|384|512)", "DESede"}) String arg0, Provider arg1);
+}
+
+package java.security;
+
+class KeyPairGenerator {
+    static KeyPairGenerator getInstance(@AllowedAlgorithms({"RSA", "EC"}) String arg0);
+    static KeyPairGenerator getInstance(@AllowedAlgorithms({"RSA", "EC"}) String arg0, @AllowedProviders({"AndroidKeyStore"}) String arg1);
+    static KeyPairGenerator getInstance(@AllowedAlgorithms({"RSA", "EC"}) String arg0, Provider arg1);
+}

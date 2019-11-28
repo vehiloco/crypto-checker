@@ -1,0 +1,45 @@
+language: java
+install: true
+
+# If the cache gets corrupted, clean it at https://travis-ci.com/ORG/REPO/caches .
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.m2/
+
+services:
+  - docker
+
+env:
+  global:
+    - THIS_REPO=crypto-checker
+    - DOCKER_IMAGE=yellow82cheng/cf-android
+  matrix:
+    - TEST_SUITE=androidKeyStoreProject1.yml
+    - TEST_SUITE=androidKeyStoreProject2.yml
+
+jdk:
+  - openjdk8
+  - openjdk11
+
+# The "docker run" command will pull if needed.
+# Running this first gives two tries in case of network lossage.
+before_script:
+  - timeout 5m docker pull $IMAGE_TAG || true
+
+script:
+  - REMOTE_ORIGIN_URL=`git config --get remote.origin.url`
+  - echo "THIS_REPO=${THIS_REPO}"
+  - echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
+  - echo "REMOTE_ORIGIN_URL=${REMOTE_ORIGIN_URL}"
+  - echo "TRAVIS_EVENT_TYPE=${TRAVIS_EVENT_TYPE}"
+  - echo "TRAVIS_COMMIT=${TRAVIS_COMMIT}"
+  - echo "TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST}"
+  - echo "TRAVIS_PULL_REQUEST_SHA=${TRAVIS_PULL_REQUEST_SHA}"
+  - echo "TRAVIS_REPO_SLUG=${TRAVIS_REPO_SLUG}"
+  - ./scripts/travis-build.sh $TEST_SUITE || travis_terminate 1
