@@ -3,6 +3,8 @@ package javax.crypto;
 import org.checkerframework.checker.crypto.qual.AllowedAlgorithms;
 import org.checkerframework.checker.crypto.qual.AllowedProviders;
 
+// https://developer.android.com/training/articles/keystore#HardwareSecurityModule
+
 class KeyGenerator {
     static KeyGenerator getInstance(@AllowedAlgorithms({"AES", "HmacSHA256", "DESede"}) String arg0);
     static KeyGenerator getInstance(@AllowedAlgorithms({"AES", "HmacSHA256", "DESede"}) String arg0, @AllowedProviders({"AndroidKeyStore"}) String arg1);
