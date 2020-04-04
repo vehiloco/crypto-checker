@@ -15,9 +15,5 @@ class AllowedAlgorithmTest {
 
         // :: error: type.invalid.annotations.on.use
         @AllowedAlgorithms int b = 1;
-
-        @AllowedAlgorithms({"AES"})
-        String c = "AES";
-        int d = c.length();
     }
 }

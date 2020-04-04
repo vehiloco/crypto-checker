@@ -27,5 +27,8 @@ class KeyGeneratorTest {
 
         // :: error: algorithm.not.allowed
         KeyGenerator.getInstance("HmacMD5", "AndroidKeyStore");
+
+        // :: error: provider.not.allowed
+        KeyGenerator.getInstance("AES", "WrongProvider");
     }
 }

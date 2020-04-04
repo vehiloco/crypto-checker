@@ -16,5 +16,8 @@ class KeyPairGeneratorTest {
         // Supported by KeyPairGenerator, but not supported by AndroidKeyStore.
         // :: error: algorithm.not.allowed
         KeyPairGenerator.getInstance("DiffieHellman", "AndroidKeyStore");
+
+        // :: error: provider.not.allowed
+        KeyPairGenerator.getInstance("EC", "WrongProvider");
     }
 }
