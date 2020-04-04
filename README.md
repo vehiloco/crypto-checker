@@ -15,6 +15,9 @@ code style.
 
  - `@AllowedAlgorithms(String[])`: Indicates that a list of algorithms is allowed by the provided
    rules. For example, `@AllowedAlgorithms({"RSA", "EC"})` means the algorithm `RSA` and `EC` are allowed.
+   Regular expressions are also allowed to use to indicate multiple algorithms easily, e.g.,
+   `@AllowedAlgorithms(HmacSHA(1|224|256|384|512))` can match `HmacSHA1`, `HmacSHA224`, `HmacSHA256`,
+   `HmacSHA384` and `HmacSHA512`. 
    
    If we annotate `KeyPairGenerator.getInstance` as follow:
    
@@ -36,7 +39,7 @@ code style.
 
  - `@AllowedProviders(String[])`: Indicates that a list of providers is allowed by the provided
    rules. For example, `@AllowedProviders({"AndroidKeyStore"})` means the provider `AndroidKeyStore`
-   is allowed. 
+   is allowed. The same as `@AllowedAlgorithms()`, regular expressions can also be used at here.
    
    Suppose that we annotate `KeyPairGenerator.getInstance` as:
    
@@ -130,18 +133,22 @@ tests/cipher/CipherTest.java:49: error: [algorithm.not.allowed] Algorithm: PBEWI
 
 [demo](./demo) is a simple Android project which integrates with the Crypto Checker. Every time
 you build the project, the Crypto Checker will run automatically to check the whole project.
-See [build.gradle](./demo/app/build.gradle) as an example gradle configuration running the Crypto Checker.
+[build.gradle](./demo/app/build.gradle) is provided as an example gradle file running the Crypto Checker.
 
-To integrate with other tools, check [Chapter 32  Integration with external tools](https://checkerframework.org/manual/#external-tools) in the Checker Framework manual.
+To integrate with other tools, see [Chapter 32  Integration with external tools](https://checkerframework.org/manual/#external-tools)
+in the Checker Framework manual.
 
 ## Stub files
 
-The Crypto Checker supplies some example stub files which contain the rules of which algorithms
-or providers are allowed to use. You can create your own stub files as your need.
+The Crypto Checker supplies some default stub files which contain the rules of which algorithms
+or providers are allowed to use. You can also create your own stub files as your need.
 
-- [Hardware-backed Keystore](src/main/java/org/checkerframework/checker/crypto/hardwarebacked.astub)
-- [Strongbox-backed Keystore](src/main/java/org/checkerframework/checker/crypto/strongboxbacked.astub)
-- [Cipher](src/main/java/org/checkerframework/checker/crypto/cipher.astub)
+- [hardwarebacked.astub](src/main/java/org/checkerframework/checker/crypto/hardwarebacked.astub):
+  Implement the security rules of Android's Hardware-backed Keystore.
+- [strongboxbacked.astub](src/main/java/org/checkerframework/checker/crypto/strongboxbacked.astub):
+  Implement the security rules of Android's Strongbox-backed Keystore. 
+- [cipher.astub](src/main/java/org/checkerframework/checker/crypto/cipher.astub):
+  Implement the security rules of Symmetric Cipher.
 
 See [Using stub class](https://checkerframework.org/manual/#stub) for more usage information.
 
