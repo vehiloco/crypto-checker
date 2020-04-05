@@ -89,7 +89,7 @@ here we provide a quick start with `javac` command.
 ./gradlew assemble copyDependencies
 
 javac -cp ./build/libs/* -processor org.checkerframework.checker.crypto.CryptoChecker \
--Astubs="cipher.astub" tests/cipher/CipherTest.java
+-Astubs="stubs/cipher.astub" tests/cipher/CipherTest.java
 ```
 
 For the users who have installed the [Checker Framework](https://checkerframework.org/) from source:
@@ -97,7 +97,7 @@ For the users who have installed the [Checker Framework](https://checkerframewor
 ```bash
 ./gradlew assemble
 javacheck -cp ./build/libs/crypto-checker.jar -processor org.checkerframework.checker.crypto.CryptoChecker \
--Astubs="cipher.astub" tests/cipher/CipherTest.java
+-Astubs="stubs/cipher.astub" tests/cipher/CipherTest.java
 ```
 
 The expected output will be something like:
@@ -147,18 +147,18 @@ in the Checker Framework manual.
 The Crypto Checker supplies some well-formed default stub files which contain the rules of which algorithms
 or providers are allowed to use. You can also create your own stub files as your need.
 
-- [hardwarebacked.astub](src/main/java/org/checkerframework/checker/crypto/hardwarebacked.astub):
+- [hardwarebacked.astub](./stubs/hardwarebacked.astub):
   Implement the security rules of Android's Hardware-backed Keystore.
-- [strongboxbacked.astub](src/main/java/org/checkerframework/checker/crypto/strongboxbacked.astub):
+- [strongboxbacked.astub](./stubs/strongboxbacked.astub):
   Implement the security rules of Android's Strongbox-backed Keystore. 
-- [cipher.astub](src/main/java/org/checkerframework/checker/crypto/cipher.astub):
+- [cipher.astub](./stubs/cipher.astub):
   Implement the security rules of Symmetric Cipher.
 
 Two forms of a transformation, `algorithm` and `algorithm/mode/padding`, are fully supported by
 the Crypto Checker. Apparently, `algorithm` is easy to indicate in the stub file. While you want 
 to express the second form, remember to use the escape character. For example, `AES/GCM/NoPadding`
-should be written as `AES\\/GCM\\/NoPadding` in the stub file. [cipher.astub](src/main/java/org/checkerframework/checker/crypto/cipher.astub) is a good example that combines several
-secure algorithms in the first and second forms together.
+should be written as `AES\\/GCM\\/NoPadding` in the stub file. [cipher.astub](./stubs/cipher.astub)
+is a good example that combines several secure algorithms in the first and second forms together.
 
 See [Using stub class](https://checkerframework.org/manual/#stub) for more usage information.
 
