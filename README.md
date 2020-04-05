@@ -157,8 +157,8 @@ or providers are allowed to use. You can also create your own stub files as your
 Two forms of a transformation, `algorithm` and `algorithm/mode/padding`, are fully supported by
 the Crypto Checker. Apparently, `algorithm` is easy to indicate in the stub file. While you want 
 to express the second form, remember to use the escape character. For example, `AES/GCM/NoPadding`
-should be written as `AES\\/GCM\\/NoPadding` in the stub file. [cipher.astub](src/main/java/org/checkerframework/checker/crypto/cipher.astub) is a good example that combines several
-secure algorithms in the first and second forms together.
+should be written as `AES\\/GCM\\/NoPadding` in the stub file. [cipher.astub](./stubs/cipher.astub)
+is a good example that combines several secure algorithms in the first and second forms together.
 
 See [Using stub class](https://checkerframework.org/manual/#stub) for more usage information.
 
