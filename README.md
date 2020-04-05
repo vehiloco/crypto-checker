@@ -17,7 +17,9 @@ code style.
    rules. For example, `@AllowedAlgorithms({"RSA", "EC"})` means the algorithm `RSA` and `EC` are allowed.
    Regular expressions are also allowed to use to indicate multiple algorithms easily, e.g.,
    `@AllowedAlgorithms(HmacSHA(1|224|256|384|512))` can match `HmacSHA1`, `HmacSHA224`, `HmacSHA256`,
-   `HmacSHA384` and `HmacSHA512`. 
+   `HmacSHA384` and `HmacSHA512`.
+   
+   **Note**: Algorithm names are case-insensitive, i.e., `HMACSHA` equals to `HmacSHA`.
    
    If we annotate `KeyPairGenerator.getInstance` as follow:
    
@@ -40,6 +42,8 @@ code style.
  - `@AllowedProviders(String[])`: Indicates that a list of providers is allowed by the provided
    rules. For example, `@AllowedProviders({"AndroidKeyStore"})` means the provider `AndroidKeyStore`
    is allowed. The same as `@AllowedAlgorithms()`, regular expressions can also be used at here.
+   
+   **Note**: Provider names are case-insensitive. 
    
    Suppose that we annotate `KeyPairGenerator.getInstance` as:
    
