@@ -141,7 +141,6 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
             algorithmsOrProvidersList =
                     AnnotationUtils.getElementValueArray(
                             stringValAnnoMirror, "value", String.class, true);
-            algorithmsOrProvidersList.replaceAll(String::toUpperCase);
         }
         return algorithmsOrProvidersList;
     }
@@ -219,7 +218,6 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
         List<String> allowedAlgorithmsOrProvidersRegexList;
         allowedAlgorithmsOrProvidersRegexList =
                 AnnotationUtils.getElementValueArray(anno, "value", String.class, true);
-        allowedAlgorithmsOrProvidersRegexList.replaceAll(String::toUpperCase);
         return allowedAlgorithmsOrProvidersRegexList;
     }
 }
