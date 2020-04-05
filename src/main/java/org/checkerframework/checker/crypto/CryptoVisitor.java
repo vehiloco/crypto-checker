@@ -28,7 +28,7 @@ import org.checkerframework.javacutil.TypesUtils;
 
 public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
 
-    final boolean strongboxbacked = checker.getLintOption("strongboxbacked", false);
+    final boolean STRONG_BOX_BACKED_ENABLE = checker.getLintOption("strongboxbacked", false);
 
     final ProcessingEnvironment env;
 
@@ -39,7 +39,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
 
     @Override
     public Void visitMethodInvocation(MethodInvocationTree node, Void p) {
-        if (strongboxbacked && setIsStrongBoxBackedIsCalled(node)) {
+        if (STRONG_BOX_BACKED_ENABLE && setIsStrongBoxBackedIsCalled(node)) {
             ExpressionTree valueExp = node.getArguments().get(0);
             AnnotationMirror booleanValAnnoMirror = getBooleanValAnnoMirror(valueExp);
             List<Boolean> booleanValueList =
@@ -61,12 +61,13 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
             ExpressionTree valueExp,
             @CompilerMessageKey String errorKey) {
 
-        final AnnotationMirror allowedAlgorithmAnno =
+        final AnnotationMirror allowedAlgoAnnoMirror =
                 varType.getAnnotation(AllowedAlgorithms.class);
 
-        final AnnotationMirror allowedProviderAnno = varType.getAnnotation(AllowedProviders.class);
+        final AnnotationMirror allowedProviderAnnoMirror =
+                varType.getAnnotation(AllowedProviders.class);
 
-        if (allowedAlgorithmAnno == null && allowedProviderAnno == null) {
+        if (allowedAlgoAnnoMirror == null && allowedProviderAnnoMirror == null) {
             super.commonAssignmentCheck(varType, valueExp, errorKey);
             return;
         }
@@ -80,19 +81,19 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                 checker.report(
                         Result.failure(
                                 "type.invalid.annotations.on.use",
-                                allowedAlgorithmAnno,
+                                allowedAlgoAnnoMirror,
                                 underlying),
                         valueExp);
             } else {
-                List<String> allowedAlgoOrProviderList;
-                if (allowedAlgorithmAnno != null) {
-                    allowedAlgoOrProviderList =
-                            getAllowedAlgorithmsOrProvidersRegexList(allowedAlgorithmAnno);
+                List<String> allowedAlgosOrProvidersList;
+                if (allowedAlgoAnnoMirror != null) {
+                    allowedAlgosOrProvidersList =
+                            getAllowedAlgosOrProvidersRegexList(allowedAlgoAnnoMirror);
                 } else {
-                    allowedAlgoOrProviderList =
-                            getAllowedAlgorithmsOrProvidersRegexList(allowedProviderAnno);
+                    allowedAlgosOrProvidersList =
+                            getAllowedAlgosOrProvidersRegexList(allowedProviderAnnoMirror);
                 }
-                if (allowedAlgoOrProviderList.isEmpty()) {
+                if (allowedAlgosOrProvidersList.isEmpty()) {
                     checker.report(
                             Result.failure("allowed.algorithm.or.provider.not.set"), valueExp);
                 }
@@ -101,41 +102,40 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
             return;
         }
 
-        List<String> algorithmsOrProvidersList =
-                getAlgorithmsOrProvidersBeingUsed(stringValAnnoMirror);
+        List<String> algosOrProvidersBeingUsed = getAlgosOrProvidersBeingUsed(stringValAnnoMirror);
 
-        if (algorithmsOrProvidersList.isEmpty()) {
+        if (algosOrProvidersBeingUsed.isEmpty()) {
             throw new BugInCF("The current using algorithms or providers list is emtpy.");
         }
 
-        if (allowedAlgorithmAnno != null) {
-            List<String> allowedAlgorithmsRegexList =
-                    getAllowedAlgorithmsOrProvidersRegexList(allowedAlgorithmAnno);
-            HashSet<String> unallowedAlgorithmsList =
+        if (allowedAlgoAnnoMirror != null) {
+            List<String> allowedAlgosRegexList =
+                    getAllowedAlgosOrProvidersRegexList(allowedAlgoAnnoMirror);
+            HashSet<String> forbiddenAlgosList =
                     new HashSet<>(
-                            findUnallowedAlgorithmsOrProviders(
-                                    allowedAlgorithmsRegexList, algorithmsOrProvidersList));
-            if (!unallowedAlgorithmsList.isEmpty()) {
-                final String unsupportedAlgorithms = String.join(", ", unallowedAlgorithmsList);
+                            getForbiddenAlgosOrProviders(
+                                    allowedAlgosRegexList, algosOrProvidersBeingUsed));
+            if (!forbiddenAlgosList.isEmpty()) {
+                final String forbiddenAlgorithms = String.join(", ", forbiddenAlgosList);
                 checker.report(
-                        Result.failure("algorithm.not.allowed", unsupportedAlgorithms), valueExp);
+                        Result.failure("algorithm.not.allowed", forbiddenAlgorithms), valueExp);
             }
         } else {
             List<String> allowedProvidersRegexList =
-                    getAllowedAlgorithmsOrProvidersRegexList(allowedProviderAnno);
-            HashSet<String> unallowedProvidersList =
+                    getAllowedAlgosOrProvidersRegexList(allowedProviderAnnoMirror);
+            HashSet<String> forbiddenProvidersList =
                     new HashSet<>(
-                            findUnallowedAlgorithmsOrProviders(
-                                    allowedProvidersRegexList, algorithmsOrProvidersList));
-            if (!unallowedProvidersList.isEmpty()) {
-                final String unsupportedProviders = String.join(", ", unallowedProvidersList);
+                            getForbiddenAlgosOrProviders(
+                                    allowedProvidersRegexList, algosOrProvidersBeingUsed));
+            if (!forbiddenProvidersList.isEmpty()) {
+                final String forbiddenProviders = String.join(", ", forbiddenProvidersList);
                 checker.report(
-                        Result.failure("provider.not.allowed", unsupportedProviders), valueExp);
+                        Result.failure("provider.not.allowed", forbiddenProviders), valueExp);
             }
         }
     }
 
-    private List<String> getAlgorithmsOrProvidersBeingUsed(AnnotationMirror stringValAnnoMirror) {
+    private List<String> getAlgosOrProvidersBeingUsed(AnnotationMirror stringValAnnoMirror) {
         List<String> algorithmsOrProvidersList = new ArrayList<>();
         if (stringValAnnoMirror != null) {
             algorithmsOrProvidersList =
@@ -145,9 +145,9 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
         return algorithmsOrProvidersList;
     }
 
-    private List<String> findUnallowedAlgorithmsOrProviders(
+    private List<String> getForbiddenAlgosOrProviders(
             List<String> regexList, List<String> algorithmsOrProvidersList) {
-        List<String> unallowedList = new ArrayList<>();
+        List<String> forbiddenList = new ArrayList<>();
         for (String each : algorithmsOrProvidersList) {
             boolean isAllowed = false;
             for (String regex : regexList) {
@@ -178,10 +178,10 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                 }
             }
             if (!isAllowed) {
-                unallowedList.add(each);
+                forbiddenList.add(each);
             }
         }
-        return unallowedList;
+        return forbiddenList;
     }
 
     private AnnotationMirror getStringValAnnoMirror(final ExpressionTree valueExp) {
@@ -214,7 +214,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
         }
     }
 
-    private List<String> getAllowedAlgorithmsOrProvidersRegexList(AnnotationMirror anno) {
+    private List<String> getAllowedAlgosOrProvidersRegexList(AnnotationMirror anno) {
         List<String> allowedAlgorithmsOrProvidersRegexList;
         allowedAlgorithmsOrProvidersRegexList =
                 AnnotationUtils.getElementValueArray(anno, "value", String.class, true);
