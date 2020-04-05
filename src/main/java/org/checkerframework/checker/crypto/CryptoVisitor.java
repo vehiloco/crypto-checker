@@ -136,14 +136,14 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
     }
 
     private List<String> getAlgosOrProvidersBeingUsed(AnnotationMirror stringValAnnoMirror) {
-        List<String> algorithmsOrProvidersList = new ArrayList<>();
+        List<String> algosOrProvidersList = new ArrayList<>();
         if (stringValAnnoMirror != null) {
-            algorithmsOrProvidersList =
+            algosOrProvidersList =
                     AnnotationUtils.getElementValueArray(
                             stringValAnnoMirror, "value", String.class, true);
-            algorithmsOrProvidersList.replaceAll(String::toUpperCase);
+            algosOrProvidersList.replaceAll(String::toUpperCase);
         }
-        return algorithmsOrProvidersList;
+        return algosOrProvidersList;
     }
 
     private List<String> getForbiddenAlgosOrProviders(
@@ -216,10 +216,10 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
     }
 
     private List<String> getAllowedAlgosOrProvidersRegexList(AnnotationMirror anno) {
-        List<String> allowedAlgorithmsOrProvidersRegexList;
-        allowedAlgorithmsOrProvidersRegexList =
+        List<String> allowedAlgosOrProvidersRegexList;
+        allowedAlgosOrProvidersRegexList =
                 AnnotationUtils.getElementValueArray(anno, "value", String.class, true);
-        allowedAlgorithmsOrProvidersRegexList.replaceAll(String::toUpperCase);
-        return allowedAlgorithmsOrProvidersRegexList;
+        allowedAlgosOrProvidersRegexList.replaceAll(String::toUpperCase);
+        return allowedAlgosOrProvidersRegexList;
     }
 }
