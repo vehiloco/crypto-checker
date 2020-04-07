@@ -15,7 +15,7 @@ public class CipherTest extends CheckerFrameworkPerFileTest {
                 CryptoChecker.class,
                 "cipher",
                 "-Anomsgtext",
-                "-Astubs=cipher.astub",
+                "-Astubs=stubs/cipher.astub",
                 "-nowarn");
     }
 

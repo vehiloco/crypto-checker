@@ -15,7 +15,7 @@ public class StrongBoxBackedTest extends CheckerFrameworkPerFileTest {
                 CryptoChecker.class,
                 "strongboxbacked",
                 "-Anomsgtext",
-                "-Astubs=strongboxbacked.astub",
+                "-Astubs=stubs/strongboxbacked.astub",
                 "-nowarn",
                 "-Alint=strongboxbacked");
     }
