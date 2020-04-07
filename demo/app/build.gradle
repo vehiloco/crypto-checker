@@ -37,7 +37,6 @@ repositories {
 apply plugin: 'org.checkerframework'
 
 checkerFramework {
-	skipVersionCheck = true
 	checkers = ['org.checkerframework.checker.crypto.CryptoChecker']
 	extraJavacArgs = ['-Astubs=hardwarebacked.astub']
 }
