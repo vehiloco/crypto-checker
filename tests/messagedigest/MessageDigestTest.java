@@ -16,7 +16,6 @@ class MessageDigestTest {
 
         MessageDigest.getInstance("SHA-384");
 
-        // :: error: algorithm.not.allowed
         MessageDigest.getInstance("SHA-512");
 
         MessageDigest.getInstance("SHA-512/224");

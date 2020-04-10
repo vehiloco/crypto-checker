@@ -19,7 +19,8 @@ public class BrokenHashABICase9 {
     }
 
     public static void method1(
-            String str, @AllowedAlgorithms({"SHA-(224|256|384|512\\/224|512\\/256)"}) String crypto)
+            String str,
+            @AllowedAlgorithms({"SHA-(224|256|384|512|512\\/224|512\\/256)"}) String crypto)
             throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(crypto);
         md.update(str.getBytes());
