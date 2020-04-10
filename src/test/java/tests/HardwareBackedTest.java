@@ -15,7 +15,7 @@ public class HardwareBackedTest extends CheckerFrameworkPerFileTest {
                 CryptoChecker.class,
                 "hardwarebacked",
                 "-Anomsgtext",
-                "-Astubs=stubs/hardwarebacked.astub",
+                "-Astubs=hardwarebacked.astub",
                 "-nowarn");
     }
 
