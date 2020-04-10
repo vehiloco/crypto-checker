@@ -15,7 +15,7 @@ public class MessageDigestTest extends CheckerFrameworkPerFileTest {
                 CryptoChecker.class,
                 "messagedigest",
                 "-Anomsgtext",
-                "-Astubs=stubs/messagedigest.astub",
+                "-Astubs=messagedigest.astub",
                 "-nowarn");
     }
 

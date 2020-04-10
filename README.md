@@ -153,7 +153,7 @@ or providers are allowed to use. You can also create your own stub files as your
   Implement the security rules of Android's Strongbox-backed Keystore. 
 - [cipher.astub](src/main/java/org/checkerframework/checker/crypto/cipher.astub):
   Implement the security rules of Symmetric Cipher.
-- [messagedigest.astub](./stubs/messagedigest.astub):
+- [messagedigest.astub](src/main/java/org/checkerframework/checker/crypto/messagedigest.astub):
   Implement the security rules of Message Digest.
 
 Two forms of a transformation, `algorithm` and `algorithm/mode/padding`, are fully supported by
