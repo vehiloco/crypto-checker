@@ -14,6 +14,7 @@ ${CRYPTOCHECKER}/build/libs/crypto-checker.jar
 
 DLJC=${JSR308}/do-like-javac
 CHECKER="org.checkerframework.checker.crypto.CryptoChecker"
+STUBFILE="cipher.astub"
 
 # Parsing build command of the target program
 build_cmd="$1"
@@ -27,7 +28,7 @@ done
 WORKING_DIR=$(pwd)
 cd "$WORKING_DIR"
 
-typecheck_cmd="python $DLJC/dljc -t checker --checker $CHECKER -- $build_cmd"
+typecheck_cmd="python $DLJC/dljc -t checker --checker $CHECKER --stub $STUBFILE -- $build_cmd"
 
 echo "============ Important variables ============="
 echo "JSR308: $JSR308"
