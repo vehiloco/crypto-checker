@@ -94,7 +94,6 @@ publishing {
 			artifactId = "crypto-checker"
 			version = "0.1-SNAPSHOT"
 			from components.java
-			// TODO This doesn't have PropertyFileHandler.
 			if (checkerframework_local) {
 				pom.withXml {
 					def dependenciesNode = asNode().appendNode('dependencies')
@@ -102,6 +101,7 @@ publishing {
 					dependencyNode.appendNode("groupId", "org.checkerframework")
 					dependencyNode.appendNode("artifactId", "checker")
 					dependencyNode.appendNode("version", "3.3.0")
+					dependencyNode.appendNode("systemPath", projectDir.toString() + "$buildDir/libs/checker.jar")
 				}
 			}
 		}
