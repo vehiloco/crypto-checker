@@ -29,9 +29,7 @@ def CHECKERFRAMEWORK = System.getenv("CHECKERFRAMEWORK")
 dependencies {
 	// This dependency is found on compile classpath of this component and consumers.
 	if (checkerframework_local) {
-		if (CHECKERFRAMEWORK == null) {
-			CHECKERFRAMEWORK = "../checker-framework/"
-		}
+		CHECKERFRAMEWORK != null ? CHECKERFRAMEWORK : "../checker-framework/"
 		implementation files("${CHECKERFRAMEWORK}/checker/dist/checker-qual.jar")
 		localDeps files("${CHECKERFRAMEWORK}/checker/dist/checker.jar")
 		implementation files("${CHECKERFRAMEWORK}/checker/dist/jdk8.jar")
@@ -162,4 +160,8 @@ test.doLast {
 task copyDependencies(type: Copy) {
 	from configurations.localDeps
 	into "$buildDir/libs"
+}
+
+task printLocalCheckerFrameworkPath() {
+	println CHECKERFRAMEWORK
 }
