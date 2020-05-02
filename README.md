@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/vehiloco/crypto-checker.svg?branch=master)](https://travis-ci.org/vehiloco/crypto-checker)
 
 The Crypto Checker is a pluggable type system built on the [Checker Framework](https://checkerframework.org/).
-It can help you to find whether there are any weak or unsupported crypto algorithms and the unsupported
+It can help you find whether there are any weak or unsupported crypto algorithms and the unsupported
 algorithm providers being used in your program. If the Crypto Checker issues no warnings for a given
 program, then you have a guarantee that your program at runtime will never have these issues.
 
@@ -77,6 +77,7 @@ For example:
 To build the Crypto Checker (In the root directory of the checker):
 
 ```bash
+./scripts/dependency-build.sh
 ./gradlew build
 ```
 
