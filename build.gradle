@@ -38,7 +38,7 @@ dependencies {
 	} else {
 		localDeps "org.checkerframework:checker:${versions.checkerFramework}"
 	}
-	compile configurations.localDeps
+	implementation configurations.localDeps
 
 	compileOnly "com.google.errorprone:javac:9+181-r4173-1"
 
@@ -94,6 +94,16 @@ publishing {
 			artifactId = "crypto-checker"
 			version = "0.1-SNAPSHOT"
 			from components.java
+			// TODO This doesn't have PropertyFileHandler.
+			if (checkerframework_local) {
+				pom.withXml {
+					def dependenciesNode = asNode().appendNode('dependencies')
+					def dependencyNode = dependenciesNode.appendNode('dependency')
+					dependencyNode.appendNode("groupId", "org.checkerframework")
+					dependencyNode.appendNode("artifactId", "checker")
+					dependencyNode.appendNode("version", "3.3.0")
+				}
+			}
 		}
 	}
 }

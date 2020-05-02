@@ -89,7 +89,7 @@ here we provide a quick start with `javac` command.
 ```bash
 ./gradlew assemble copyDependencies
 
-javac -cp ./build/libs/* -processor org.checkerframework.checker.crypto.CryptoChecker \
+javac -cp ./build/libs/checker.jar:./build/libs/crypto-checker.jar -processor org.checkerframework.checker.crypto.CryptoChecker \
 -Astubs="cipher.astub" tests/cipher/CipherTest.java
 ```
 
