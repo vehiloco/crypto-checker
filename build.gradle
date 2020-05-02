@@ -23,19 +23,22 @@ ext.versions = [
 ]
 
 sourceCompatibility = 1.8
-def checkerframework_local = false  // Set this variable to [true] while using local version of checker framework.
+def checkerframework_local = true  // Set this variable to [true] while using local version of checker framework.
 def CHECKERFRAMEWORK = System.getenv("CHECKERFRAMEWORK")
 
 dependencies {
 	// This dependency is found on compile classpath of this component and consumers.
-	if (checkerframework_local && CHECKERFRAMEWORK != null) {
+	if (checkerframework_local) {
+		if (CHECKERFRAMEWORK == null) {
+			CHECKERFRAMEWORK = "../checker-framework/"
+		}
 		implementation files("${CHECKERFRAMEWORK}/checker/dist/checker-qual.jar")
-		implementation files("${CHECKERFRAMEWORK}/checker/dist/checker.jar")
+		localDeps files("${CHECKERFRAMEWORK}/checker/dist/checker.jar")
 		implementation files("${CHECKERFRAMEWORK}/checker/dist/jdk8.jar")
 	} else {
 		localDeps "org.checkerframework:checker:${versions.checkerFramework}"
-		compile configurations.localDeps
 	}
+	implementation configurations.localDeps
 
 	compileOnly "com.google.errorprone:javac:9+181-r4173-1"
 
@@ -91,6 +94,16 @@ publishing {
 			artifactId = "crypto-checker"
 			version = "0.1-SNAPSHOT"
 			from components.java
+			if (checkerframework_local) {
+				pom.withXml {
+					def dependenciesNode = asNode().appendNode('dependencies')
+					def dependencyNode = dependenciesNode.appendNode('dependency')
+					dependencyNode.appendNode("groupId", "org.checkerframework")
+					dependencyNode.appendNode("artifactId", "checker")
+					dependencyNode.appendNode("version", "3.3.0")
+					dependencyNode.appendNode("systemPath", projectDir.toString() + "$buildDir/libs/checker.jar")
+				}
+			}
 		}
 	}
 }

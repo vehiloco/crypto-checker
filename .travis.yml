@@ -25,7 +25,8 @@ env:
 
 jdk:
   - openjdk8
-  - openjdk11
+#  TODO update build.gradle to build with openjdk11
+#  - openjdk11
 
 # The "docker run" command will pull if needed.
 # Running this first gives two tries in case of network lossage.
