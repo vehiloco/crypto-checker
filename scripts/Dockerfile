@@ -1,16 +1,11 @@
-FROM ubuntu:18.04
+FROM mdernst/cf-ubuntu-jdk8
 
-RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt-get -qqy update \
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -qqy update \
 && apt-get -qqy install \
-    openjdk-8-jdk \
-    wget \
-    unzip \
-    git \
     python-pip \
     python2.7 \
-    python3-pip \
-    python3 \
 && pip2 install pyyaml \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
