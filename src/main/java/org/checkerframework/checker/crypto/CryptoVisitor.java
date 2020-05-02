@@ -18,7 +18,6 @@ import org.checkerframework.common.value.ValueAnnotatedTypeFactory;
 import org.checkerframework.common.value.ValueChecker;
 import org.checkerframework.common.value.qual.BoolVal;
 import org.checkerframework.common.value.qual.StringVal;
-import org.checkerframework.framework.source.Result;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.javacutil.AnnotationUtils;
 import org.checkerframework.javacutil.BugInCF;
@@ -49,7 +48,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                 throw new BugInCF("Size of booleanValueList should always be 1");
             }
             if (!booleanValueList.get(0)) {
-                checker.report(Result.failure("strongbox.backed.disabled", valueExp), node);
+                checker.reportError(node, "strongbox.backed.disabled", valueExp);
             }
         }
         return super.visitMethodInvocation(node, p);
@@ -78,12 +77,11 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
             TypeMirror underlying =
                     TypeAnnotationUtils.unannotatedType(varType.getErased().getUnderlyingType());
             if (!TypesUtils.isString(underlying)) {
-                checker.report(
-                        Result.failure(
-                                "type.invalid.annotations.on.use",
-                                allowedAlgoAnnoMirror,
-                                underlying),
-                        valueExp);
+                checker.reportError(
+                        valueExp,
+                        "type.invalid.annotations.on.use",
+                        allowedAlgoAnnoMirror,
+                        underlying);
             } else {
                 List<String> allowedAlgosOrProvidersList;
                 if (allowedAlgoAnnoMirror != null) {
@@ -94,8 +92,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                             getAllowedAlgosOrProvidersRegexList(allowedProviderAnnoMirror);
                 }
                 if (allowedAlgosOrProvidersList.isEmpty()) {
-                    checker.report(
-                            Result.failure("allowed.algorithm.or.provider.not.set"), valueExp);
+                    checker.reportError(valueExp, "allowed.algorithm.or.provider.not.set");
                 }
                 super.commonAssignmentCheck(varType, valueExp, errorKey);
             }
@@ -117,8 +114,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                                     allowedAlgosRegexList, algosOrProvidersBeingUsed));
             if (!forbiddenAlgosList.isEmpty()) {
                 final String forbiddenAlgorithms = String.join(", ", forbiddenAlgosList);
-                checker.report(
-                        Result.failure("algorithm.not.allowed", forbiddenAlgorithms), valueExp);
+                checker.reportError(valueExp, "algorithm.not.allowed", forbiddenAlgorithms);
             }
         } else {
             List<String> allowedProvidersRegexList =
@@ -129,8 +125,8 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                                     allowedProvidersRegexList, algosOrProvidersBeingUsed));
             if (!forbiddenProvidersList.isEmpty()) {
                 final String forbiddenProviders = String.join(", ", forbiddenProvidersList);
-                checker.report(
-                        Result.failure("provider.not.allowed", forbiddenProviders), valueExp);
+                checker.reportError(valueExp, "provider.not.allowed", forbiddenProviders);
+
             }
         }
     }
