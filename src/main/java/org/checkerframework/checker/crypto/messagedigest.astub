@@ -1,0 +1,10 @@
+package java.security;
+
+import org.checkerframework.checker.crypto.qual.AllowedAlgorithms;
+
+class MessageDigest {
+  protected MessageDigest(@AllowedAlgorithms({"SHA-(224|256|384|512|512\\/224|512\\/256)"}) String algorithm);
+  static MessageDigest getInstance(@AllowedAlgorithms({"SHA-(224|256|384|512|512\\/224|512\\/256)"}) String algorithm);
+  static MessageDigest getInstance(@AllowedAlgorithms({"SHA-(224|256|384|512|512\\/224|512\\/256)"}) String algorithm, String provider);
+  static MessageDigest getInstance(@AllowedAlgorithms({"SHA-(224|256|384|512|512\\/224|512\\/256)"}) String algorithm, Provider provider);
+}

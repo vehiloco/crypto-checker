@@ -61,7 +61,7 @@ dependencies {
 	androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 	// Crypto Checker configuration start
-	ext.checkerFrameworkVersion = '3.1.1'
+	ext.checkerFrameworkVersion = '3.3.0'
 	annotationProcessor "org.checkerframework:crypto-checker:0.1-SNAPSHOT"
 	implementation files("../../crypto-checker-qual-android/build/libs/crypto-checker-qual-android.jar")
 	checkerFrameworkAnnotatedJDK files("../../jdk8.jar")

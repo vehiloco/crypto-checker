@@ -6,23 +6,24 @@ import java.util.List;
 import org.checkerframework.checker.crypto.CryptoChecker;
 import org.checkerframework.framework.test.CheckerFrameworkPerFileTest;
 import org.checkerframework.framework.test.TestUtilities;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Parameterized;
 
-public class CipherTest extends CheckerFrameworkPerFileTest {
-    public CipherTest(File testFile) {
+public class PropertFileTest extends CheckerFrameworkPerFileTest {
+    public PropertFileTest(File testFile) {
         super(
                 testFile,
                 CryptoChecker.class,
-                "cipher",
+                "propertyfile",
                 "-Anomsgtext",
                 "-Astubs=cipher.astub",
+                "-AhandlePropertyFile",
                 "-nowarn");
     }
 
-    @Parameters
+    @Parameterized.Parameters
     public static List<File> getTestFiles() {
         return new ArrayList<>(
                 TestUtilities.findRelativeNestedJavaFiles(
-                        "tests", "cipher", "cryptoapibench/brokencrypto", "general"));
+                        "tests", "cipher", "propertyfile", "general"));
     }
 }
