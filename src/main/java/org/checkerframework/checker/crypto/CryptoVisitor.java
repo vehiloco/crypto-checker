@@ -126,7 +126,6 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
             if (!forbiddenProvidersList.isEmpty()) {
                 final String forbiddenProviders = String.join(", ", forbiddenProvidersList);
                 checker.reportError(valueExp, "provider.not.allowed", forbiddenProviders);
-
             }
         }
     }
