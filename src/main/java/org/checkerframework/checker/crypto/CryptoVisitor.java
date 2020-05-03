@@ -2,6 +2,7 @@ package org.checkerframework.checker.crypto;
 
 import com.sun.source.tree.ExpressionTree;
 import com.sun.source.tree.MethodInvocationTree;
+import com.sun.source.tree.Tree;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -76,7 +77,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
         if (stringValAnnoMirror == null) {
             TypeMirror underlying =
                     TypeAnnotationUtils.unannotatedType(varType.getErased().getUnderlyingType());
-            if (!TypesUtils.isString(underlying)) {
+            if (!TypesUtils.isString(underlying) || valueExp.getKind() == Tree.Kind.NULL_LITERAL) {
                 checker.reportError(
                         valueExp,
                         "type.invalid.annotations.on.use",
