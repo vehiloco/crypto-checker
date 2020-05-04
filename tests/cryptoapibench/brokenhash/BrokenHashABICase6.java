@@ -2,11 +2,12 @@ package org.cryptoapi.bench.brokenhash;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import org.checkerframework.common.value.qual.StringVal;
 
 public class BrokenHashABICase6 {
     public static final String DEFAULT_CRYPTO = "MD5";
-    private static char[] CRYPTO;
-    private static char[] crypto;
+    private static char @StringVal("MD5") [] CRYPTO;
+    private static char @StringVal("MD5") [] crypto;
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         String str = "abcdef";
@@ -24,7 +25,7 @@ public class BrokenHashABICase6 {
     }
 
     public static void go(String str) throws NoSuchAlgorithmException {
-        // :: error: argument.type.incompatible
+        // :: error: algorithm.not.allowed
         MessageDigest md = MessageDigest.getInstance(String.valueOf(crypto));
         md.update(str.getBytes());
         System.out.println(md.digest());
