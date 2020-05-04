@@ -6,19 +6,18 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import org.checkerframework.common.value.qual.StringVal;
 
 public class BrokenCryptoABICase7 {
     public static final String DEFAULT_CRYPTO = "RC4";
-    private static char[] CRYPTO;
-    private static char[] crypto;
+    private static char @StringVal("RC4") [] CRYPTO;
+    private static char @StringVal("RC4") [] crypto;
 
     public void go() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         KeyGenerator keyGen = KeyGenerator.getInstance(String.valueOf(crypto));
         SecretKey key = keyGen.generateKey();
 
-        // The error is supposed to be 'algorithm.not.allowed'; however, crypto's
-        // information is lost after a method call, i.g., go3().
-        // :: error: argument.type.incompatible
+        // :: error: algorithm.not.allowed
         Cipher cipher = Cipher.getInstance(String.valueOf(crypto));
         cipher.init(Cipher.ENCRYPT_MODE, key);
     }
