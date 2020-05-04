@@ -5,6 +5,7 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.*;
+import org.checkerframework.common.value.qual.StringVal;
 
 public class BrokenHashABSCase1 {
     CryptoHash1 crypto;
@@ -18,9 +19,11 @@ public class BrokenHashABSCase1 {
 }
 
 class CryptoHash1 {
+    @StringVal("SHA1")
     String crypto;
 
-    public CryptoHash1(String defCrypto) throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public CryptoHash1(@StringVal("SHA1") String defCrypto)
+            throws NoSuchPaddingException, NoSuchAlgorithmException {
         crypto = defCrypto;
     }
 
@@ -31,7 +34,7 @@ class CryptoHash1 {
             passedAlgo = crypto;
         }
 
-        // :: error: argument.type.incompatible
+        // :: error: algorithm.not.allowed
         MessageDigest md = MessageDigest.getInstance(crypto);
         md.update(str.getBytes());
         System.out.println(md.digest());

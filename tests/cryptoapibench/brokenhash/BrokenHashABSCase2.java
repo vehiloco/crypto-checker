@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import org.checkerframework.common.value.qual.StringVal;
 
 public class BrokenHashABSCase2 {
     CryptoHash2 crypto;
@@ -20,9 +21,11 @@ public class BrokenHashABSCase2 {
 }
 
 class CryptoHash2 {
+    @StringVal("MD5")
     String crypto;
 
-    public CryptoHash2(String defCrypto) throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public CryptoHash2(@StringVal("MD5") String defCrypto)
+            throws NoSuchPaddingException, NoSuchAlgorithmException {
         crypto = defCrypto;
     }
 
@@ -33,7 +36,7 @@ class CryptoHash2 {
             passedAlgo = crypto;
         }
 
-        // :: error: argument.type.incompatible
+        // :: error: algorithm.not.allowed
         MessageDigest md = MessageDigest.getInstance(crypto);
         md.update(str.getBytes());
         System.out.println(md.digest());
