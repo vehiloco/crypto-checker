@@ -104,34 +104,55 @@ javacheck -cp ./build/libs/crypto-checker.jar -processor org.checkerframework.ch
 The expected output will be something like:
 
 ```
-tests/cipher/CipherTest.java:19: error: [algorithm.not.allowed] Algorithm: DES/ECB/PKCS5PADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:9: error: [algorithm.not.allowed] Algorithm: AES is not allowed by the current rules
+        Cipher.getInstance("AES");
+                           ^
+tests/cipher/CipherTest.java:20: error: [algorithm.not.allowed] Algorithm: DES/ECB/PKCS5PADDING is not allowed by the current rules
         Cipher.getInstance("DES/ECB/PKCS5Padding");
                            ^
-tests/cipher/CipherTest.java:22: error: [algorithm.not.allowed] Algorithm: AES/ECB/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:23: error: [algorithm.not.allowed] Algorithm: AES/ECB/NOPADDING is not allowed by the current rules
         Cipher.getInstance("AES/ECB/NoPadding");
                            ^
-tests/cipher/CipherTest.java:25: error: [algorithm.not.allowed] Algorithm: DES/CCM/PKCS5PADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:26: error: [algorithm.not.allowed] Algorithm: DES/CCM/PKCS5PADDING is not allowed by the current rules
         Cipher.getInstance("DES/CCM/PKCS5Padding");
                            ^
-tests/cipher/CipherTest.java:28: error: [algorithm.not.allowed] Algorithm: BLOWFISH/CBC/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:29: error: [algorithm.not.allowed] Algorithm: BLOWFISH/CBC/NOPADDING is not allowed by the current rules
         Cipher.getInstance("Blowfish/CBC/NoPadding");
                            ^
-tests/cipher/CipherTest.java:31: error: [algorithm.not.allowed] Algorithm: RC4/CBC/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:32: error: [algorithm.not.allowed] Algorithm: RC4/CBC/NOPADDING is not allowed by the current rules
         Cipher.getInstance("RC4/CBC/NoPadding");
                            ^
-tests/cipher/CipherTest.java:34: error: [algorithm.not.allowed] Algorithm: RC2/CBC/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:35: error: [algorithm.not.allowed] Algorithm: RC2/CBC/NOPADDING is not allowed by the current rules
         Cipher.getInstance("RC2/CBC/NoPadding");
                            ^
-tests/cipher/CipherTest.java:37: error: [algorithm.not.allowed] Algorithm: IDEA/CBC/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:38: error: [algorithm.not.allowed] Algorithm: IDEA/CBC/NOPADDING is not allowed by the current rules
         Cipher.getInstance("IDEA/CBC/NoPadding");
                            ^
-tests/cipher/CipherTest.java:44: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDDES/CCM/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:41: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDDES is not allowed by the current rules
+        Cipher.getInstance("PBEWithMD5AndDES");
+                           ^
+tests/cipher/CipherTest.java:44: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDDES/CBC/PKCS5PADDING is not allowed by the current rules
+        Cipher.getInstance("PBEWithMD5AndDES/CBC/PKCS5Padding");
+                           ^
+tests/cipher/CipherTest.java:47: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDDES/CCM/NOPADDING is not allowed by the current rules
         Cipher.getInstance("PBEWithMD5AndDES/CCM/NoPadding");
                            ^
-tests/cipher/CipherTest.java:49: error: [algorithm.not.allowed] Algorithm: PBEWITHHMACSHA577ANDAES_128 is not allowed by the current rules
+tests/cipher/CipherTest.java:54: error: [algorithm.not.allowed] Algorithm: PBEWITHHMACSHA577ANDAES_128 is not allowed by the current rules
         Cipher.getInstance("PBEWithHmacSHA577AndAES_128");
                            ^
-9 errors
+tests/cipher/CipherTest.java:57: error: [algorithm.not.allowed] Algorithm: PBEWITHSHAAND3KEYTRIPLEDES is not allowed by the current rules
+        Cipher.getInstance("PBEWithSHAAnd3KeyTripleDES");
+                           ^
+tests/cipher/CipherTest.java:60: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDTRIPLEDES is not allowed by the current rules
+        Cipher.getInstance("PBEWithMD5AndTripleDES");
+                           ^
+tests/cipher/CipherTest.java:63: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDTRIPLEDES is not allowed by the current rules
+        Cipher.getInstance("PBEWithMD5AndTripleDES");
+                           ^
+tests/cipher/CipherTest.java:70: error: [algorithm.not.allowed] Algorithm: RSA/NONE/OAEPWITHSHA-1ANDMGF1PADDING is not allowed by the current rules
+        Cipher.getInstance("RSA/NONE/OAEPwithSHA-1andMGF1Padding");
+                           ^
+16 errors
 ```
 
 ## Run the Crypto Checker with the whole project
