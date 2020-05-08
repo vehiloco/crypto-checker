@@ -77,6 +77,13 @@ For example:
 To build the Crypto Checker (In the root directory of the checker):
 
 ```bash
+./gradlew build
+```
+
+When building with local Checker Framework:
+
+```bash
+# Set checkerframework_local = true at first in build.gradle
 ./scripts/dependency-build.sh
 ./gradlew build
 ```

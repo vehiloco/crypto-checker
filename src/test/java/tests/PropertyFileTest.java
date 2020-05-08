@@ -8,8 +8,8 @@ import org.checkerframework.framework.test.CheckerFrameworkPerFileTest;
 import org.checkerframework.framework.test.TestUtilities;
 import org.junit.runners.Parameterized;
 
-public class PropertFileTest extends CheckerFrameworkPerFileTest {
-    public PropertFileTest(File testFile) {
+public class PropertyFileTest extends CheckerFrameworkPerFileTest {
+    public PropertyFileTest(File testFile) {
         super(
                 testFile,
                 CryptoChecker.class,
