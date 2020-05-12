@@ -80,7 +80,7 @@ To build the Crypto Checker (In the root directory of the checker):
 ./gradlew build
 ```
 
-When building with local Checker Framework:
+If building with local Checker Framework:
 
 ```bash
 # Set checkerframework_local = true at first in build.gradle
@@ -167,6 +167,11 @@ tests/cipher/CipherTest.java:70: error: [algorithm.not.allowed] Algorithm: RSA/N
 [demo](./demo) is a simple Android project which integrates with the Crypto Checker. Every time
 you build the project, the Crypto Checker will run automatically to check the whole project.
 [build.gradle](./demo/app/build.gradle) is provided as an example gradle file running the Crypto Checker.
+
+More projects which have been integrated with the Crypto Checker (Remember to change the path in `app/build.gradle`):
+
+- [revolution-irc](https://github.com/xwt-benchmarks/revolution-irc): Run `./gradlew build` to perform checking.
+- [BiometricPromptDemo](https://github.com/xwt-benchmarks/BiometricPromptDemo): Run `./gradlew build` to perform checking.
 
 To integrate with other tools, see [Chapter 32  Integration with external tools](https://checkerframework.org/manual/#external-tools)
 in the Checker Framework manual.
