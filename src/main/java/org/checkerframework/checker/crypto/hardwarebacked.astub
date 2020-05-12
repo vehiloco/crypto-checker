@@ -6,7 +6,7 @@ import org.checkerframework.checker.crypto.qual.AllowedProviders;
 // https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/keystore/java/android/security/keystore/AndroidKeyStoreProvider.java
 
 class KeyGenerator {
-    static KeyGenerator getInstance(@AllowedAlgorithms({"AES", "HmacSHA(1|224|256|384|512)", "DESede"}) String arg0);
+    static KeyGenerator getInstance(@AllowedAlgorithms({""}) String arg0); // Do not allow to be used without specifying the provider as AndroidKeyStore
     static KeyGenerator getInstance(@AllowedAlgorithms({"AES", "HmacSHA(1|224|256|384|512)", "DESede"}) String arg0, @AllowedProviders({"AndroidKeyStore"}) String arg1);
     static KeyGenerator getInstance(@AllowedAlgorithms({"AES", "HmacSHA(1|224|256|384|512)", "DESede"}) String arg0, @AllowedProviders({"AndroidKeyStore"}) Provider arg1);
 }
@@ -14,7 +14,7 @@ class KeyGenerator {
 package java.security;
 
 class KeyPairGenerator {
-    static KeyPairGenerator getInstance(@AllowedAlgorithms({"RSA", "EC"}) String arg0);
+    static KeyPairGenerator getInstance(@AllowedAlgorithms({""}) String arg0); // Do not allow to be used without specifying the provider as AndroidKeyStore
     static KeyPairGenerator getInstance(@AllowedAlgorithms({"RSA", "EC"}) String arg0, @AllowedProviders({"AndroidKeyStore"}) String arg1);
     static KeyPairGenerator getInstance(@AllowedAlgorithms({"RSA", "EC"}) String arg0, @AllowedProviders({"AndroidKeyStore"}) Provider arg1);
 }
