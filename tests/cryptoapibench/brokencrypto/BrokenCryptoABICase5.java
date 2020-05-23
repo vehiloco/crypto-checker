@@ -6,11 +6,12 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import org.checkerframework.common.value.qual.StringVal;
 
 public class BrokenCryptoABICase5 {
     public static final String DEFAULT_CRYPTO = "DES/ECB/PKCS5Padding";
-    private static char[] CRYPTO;
-    private static char[] crypto;
+    private static char @StringVal("DES/ECB/PKCS5Padding") [] CRYPTO;
+    private static char @StringVal("DES/ECB/PKCS5Padding") [] crypto;
 
     public static final String DEFAULT_CRYPTO_ALGO = "DES";
     private static char[] CRYPTO_ALGO;
@@ -20,9 +21,7 @@ public class BrokenCryptoABICase5 {
         KeyGenerator keyGen = KeyGenerator.getInstance(String.valueOf(crypto_algo));
         SecretKey key = keyGen.generateKey();
 
-        // The error is supposed to be 'algorithm.not.allowed'; however, crypto's
-        // information is lost after a method call, i.g., go3().
-        // :: error: argument.type.incompatible
+        // :: error: algorithm.not.allowed
         Cipher cipher = Cipher.getInstance(String.valueOf(crypto));
         cipher.init(Cipher.ENCRYPT_MODE, key);
     }

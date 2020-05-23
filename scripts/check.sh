@@ -15,7 +15,7 @@ ${CRYPTOCHECKER}/build/libs/crypto-checker.jar
 # Command
 DEBUG=""
 CHECKER="org.checkerframework.checker.crypto.CryptoChecker"
-STUBFILE="${CRYPTOCHECKER}/stubs/hardwarebacked.astub"
+STUBFILE="hardwarebacked.astub"
 
 declare -a ARGS
 for i in "$@" ; do

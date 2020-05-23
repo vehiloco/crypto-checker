@@ -15,7 +15,7 @@ public class CipherTest extends CheckerFrameworkPerFileTest {
                 CryptoChecker.class,
                 "cipher",
                 "-Anomsgtext",
-                "-Astubs=stubs/cipher.astub",
+                "-Astubs=cipher.astub",
                 "-nowarn");
     }
 
@@ -23,6 +23,6 @@ public class CipherTest extends CheckerFrameworkPerFileTest {
     public static List<File> getTestFiles() {
         return new ArrayList<>(
                 TestUtilities.findRelativeNestedJavaFiles(
-                        "tests", "cipher", "cryptoapibench", "general"));
+                        "tests", "cipher", "cryptoapibench/brokencrypto", "general"));
     }
 }

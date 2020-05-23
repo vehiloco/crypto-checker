@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/vehiloco/crypto-checker.svg?branch=master)](https://travis-ci.org/vehiloco/crypto-checker)
 
 The Crypto Checker is a pluggable type system built on the [Checker Framework](https://checkerframework.org/).
-It can help you to find whether there are any weak or unsupported crypto algorithms and the unsupported
+It can help you find whether there are any weak or unsupported crypto algorithms and the unsupported
 algorithm providers being used in your program. If the Crypto Checker issues no warnings for a given
 program, then you have a guarantee that your program at runtime will never have these issues.
 
@@ -80,6 +80,14 @@ To build the Crypto Checker (In the root directory of the checker):
 ./gradlew build
 ```
 
+If building with local Checker Framework:
+
+```bash
+# Set checkerframework_local = true at first in build.gradle
+./scripts/dependency-build.sh
+./gradlew build
+```
+
 ## Quick Start
 
 The Crypto Checker can work with [multiple build tools](https://checkerframework.org/manual/#external-tools),
@@ -88,8 +96,8 @@ here we provide a quick start with `javac` command.
 ```bash
 ./gradlew assemble copyDependencies
 
-javac -cp ./build/libs/* -processor org.checkerframework.checker.crypto.CryptoChecker \
--Astubs="stubs/cipher.astub" tests/cipher/CipherTest.java
+javac -cp ./build/libs/checker.jar:./build/libs/crypto-checker.jar -processor org.checkerframework.checker.crypto.CryptoChecker \
+-Astubs="cipher.astub" tests/cipher/CipherTest.java
 ```
 
 For the users who have installed the [Checker Framework](https://checkerframework.org/) from source:
@@ -97,40 +105,61 @@ For the users who have installed the [Checker Framework](https://checkerframewor
 ```bash
 ./gradlew assemble
 javacheck -cp ./build/libs/crypto-checker.jar -processor org.checkerframework.checker.crypto.CryptoChecker \
--Astubs="stubs/cipher.astub" tests/cipher/CipherTest.java
+-Astubs="cipher.astub" tests/cipher/CipherTest.java
 ```
 
 The expected output will be something like:
 
 ```
-tests/cipher/CipherTest.java:19: error: [algorithm.not.allowed] Algorithm: DES/ECB/PKCS5PADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:9: error: [algorithm.not.allowed] Algorithm: AES is not allowed by the current rules
+        Cipher.getInstance("AES");
+                           ^
+tests/cipher/CipherTest.java:20: error: [algorithm.not.allowed] Algorithm: DES/ECB/PKCS5PADDING is not allowed by the current rules
         Cipher.getInstance("DES/ECB/PKCS5Padding");
                            ^
-tests/cipher/CipherTest.java:22: error: [algorithm.not.allowed] Algorithm: AES/ECB/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:23: error: [algorithm.not.allowed] Algorithm: AES/ECB/NOPADDING is not allowed by the current rules
         Cipher.getInstance("AES/ECB/NoPadding");
                            ^
-tests/cipher/CipherTest.java:25: error: [algorithm.not.allowed] Algorithm: DES/CCM/PKCS5PADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:26: error: [algorithm.not.allowed] Algorithm: DES/CCM/PKCS5PADDING is not allowed by the current rules
         Cipher.getInstance("DES/CCM/PKCS5Padding");
                            ^
-tests/cipher/CipherTest.java:28: error: [algorithm.not.allowed] Algorithm: BLOWFISH/CBC/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:29: error: [algorithm.not.allowed] Algorithm: BLOWFISH/CBC/NOPADDING is not allowed by the current rules
         Cipher.getInstance("Blowfish/CBC/NoPadding");
                            ^
-tests/cipher/CipherTest.java:31: error: [algorithm.not.allowed] Algorithm: RC4/CBC/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:32: error: [algorithm.not.allowed] Algorithm: RC4/CBC/NOPADDING is not allowed by the current rules
         Cipher.getInstance("RC4/CBC/NoPadding");
                            ^
-tests/cipher/CipherTest.java:34: error: [algorithm.not.allowed] Algorithm: RC2/CBC/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:35: error: [algorithm.not.allowed] Algorithm: RC2/CBC/NOPADDING is not allowed by the current rules
         Cipher.getInstance("RC2/CBC/NoPadding");
                            ^
-tests/cipher/CipherTest.java:37: error: [algorithm.not.allowed] Algorithm: IDEA/CBC/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:38: error: [algorithm.not.allowed] Algorithm: IDEA/CBC/NOPADDING is not allowed by the current rules
         Cipher.getInstance("IDEA/CBC/NoPadding");
                            ^
-tests/cipher/CipherTest.java:44: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDDES/CCM/NOPADDING is not allowed by the current rules
+tests/cipher/CipherTest.java:41: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDDES is not allowed by the current rules
+        Cipher.getInstance("PBEWithMD5AndDES");
+                           ^
+tests/cipher/CipherTest.java:44: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDDES/CBC/PKCS5PADDING is not allowed by the current rules
+        Cipher.getInstance("PBEWithMD5AndDES/CBC/PKCS5Padding");
+                           ^
+tests/cipher/CipherTest.java:47: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDDES/CCM/NOPADDING is not allowed by the current rules
         Cipher.getInstance("PBEWithMD5AndDES/CCM/NoPadding");
                            ^
-tests/cipher/CipherTest.java:49: error: [algorithm.not.allowed] Algorithm: PBEWITHHMACSHA577ANDAES_128 is not allowed by the current rules
+tests/cipher/CipherTest.java:54: error: [algorithm.not.allowed] Algorithm: PBEWITHHMACSHA577ANDAES_128 is not allowed by the current rules
         Cipher.getInstance("PBEWithHmacSHA577AndAES_128");
                            ^
-9 errors
+tests/cipher/CipherTest.java:57: error: [algorithm.not.allowed] Algorithm: PBEWITHSHAAND3KEYTRIPLEDES is not allowed by the current rules
+        Cipher.getInstance("PBEWithSHAAnd3KeyTripleDES");
+                           ^
+tests/cipher/CipherTest.java:60: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDTRIPLEDES is not allowed by the current rules
+        Cipher.getInstance("PBEWithMD5AndTripleDES");
+                           ^
+tests/cipher/CipherTest.java:63: error: [algorithm.not.allowed] Algorithm: PBEWITHMD5ANDTRIPLEDES is not allowed by the current rules
+        Cipher.getInstance("PBEWithMD5AndTripleDES");
+                           ^
+tests/cipher/CipherTest.java:70: error: [algorithm.not.allowed] Algorithm: RSA/NONE/OAEPWITHSHA-1ANDMGF1PADDING is not allowed by the current rules
+        Cipher.getInstance("RSA/NONE/OAEPwithSHA-1andMGF1Padding");
+                           ^
+16 errors
 ```
 
 ## Run the Crypto Checker with the whole project
@@ -138,6 +167,11 @@ tests/cipher/CipherTest.java:49: error: [algorithm.not.allowed] Algorithm: PBEWI
 [demo](./demo) is a simple Android project which integrates with the Crypto Checker. Every time
 you build the project, the Crypto Checker will run automatically to check the whole project.
 [build.gradle](./demo/app/build.gradle) is provided as an example gradle file running the Crypto Checker.
+
+More projects which have been integrated with the Crypto Checker (Remember to change the path in `app/build.gradle`):
+
+- [revolution-irc](https://github.com/xwt-benchmarks/revolution-irc): Run `./gradlew build` to perform checking.
+- [BiometricPromptDemo](https://github.com/xwt-benchmarks/BiometricPromptDemo): Run `./gradlew build` to perform checking.
 
 To integrate with other tools, see [Chapter 32  Integration with external tools](https://checkerframework.org/manual/#external-tools)
 in the Checker Framework manual.
@@ -147,18 +181,20 @@ in the Checker Framework manual.
 The Crypto Checker supplies some well-formed default stub files which contain the rules of which algorithms
 or providers are allowed to use. You can also create your own stub files as your need.
 
-- [hardwarebacked.astub](./stubs/hardwarebacked.astub):
+- [hardwarebacked.astub](src/main/java/org/checkerframework/checker/crypto/hardwarebacked.astub):
   Implement the security rules of Android's Hardware-backed Keystore.
-- [strongboxbacked.astub](./stubs/strongboxbacked.astub):
+- [strongboxbacked.astub](src/main/java/org/checkerframework/checker/crypto/strongboxbacked.astub):
   Implement the security rules of Android's Strongbox-backed Keystore. 
-- [cipher.astub](./stubs/cipher.astub):
+- [cipher.astub](src/main/java/org/checkerframework/checker/crypto/cipher.astub):
   Implement the security rules of Symmetric Cipher.
+- [messagedigest.astub](src/main/java/org/checkerframework/checker/crypto/messagedigest.astub):
+  Implement the security rules of Message Digest.
 
 Two forms of a transformation, `algorithm` and `algorithm/mode/padding`, are fully supported by
 the Crypto Checker. Apparently, `algorithm` is easy to indicate in the stub file. While you want 
 to express the second form, remember to use the escape character. For example, `AES/GCM/NoPadding`
-should be written as `AES\\/GCM\\/NoPadding` in the stub file. [cipher.astub](./stubs/cipher.astub)
-is a good example that combines several secure algorithms in the first and second forms together.
+should be written as `AES\\/GCM\\/NoPadding` in the stub file. [cipher.astub](src/main/java/org/checkerframework/checker/crypto/cipher.astub) is a good example that combines several
+secure algorithms in the first and second forms together.
 
 See [Using stub class](https://checkerframework.org/manual/#stub) for more usage information.
 

@@ -1,5 +1,5 @@
 plugins {
-	id "org.checkerframework" version "0.4.14" apply false
+	id "org.checkerframework" version "0.5.2" apply false
 }
 
 apply plugin: 'com.android.application'

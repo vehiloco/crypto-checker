@@ -15,5 +15,8 @@ class AllowedAlgorithmTest {
 
         // :: error: type.invalid.annotations.on.use
         @AllowedAlgorithms int b = 1;
+
+        // :: error: type.invalid.annotations.on.use
+        usingAlgorithm = null;
     }
 }

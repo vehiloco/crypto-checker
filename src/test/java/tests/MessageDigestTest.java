@@ -8,20 +8,21 @@ import org.checkerframework.framework.test.CheckerFrameworkPerFileTest;
 import org.checkerframework.framework.test.TestUtilities;
 import org.junit.runners.Parameterized.Parameters;
 
-public class HardwareBackedTest extends CheckerFrameworkPerFileTest {
-    public HardwareBackedTest(File testFiles) {
+public class MessageDigestTest extends CheckerFrameworkPerFileTest {
+    public MessageDigestTest(File testFile) {
         super(
-                testFiles,
+                testFile,
                 CryptoChecker.class,
-                "hardwarebacked",
+                "messagedigest",
                 "-Anomsgtext",
-                "-Astubs=hardwarebacked.astub",
+                "-Astubs=messagedigest.astub",
                 "-nowarn");
     }
 
     @Parameters
     public static List<File> getTestFiles() {
         return new ArrayList<>(
-                TestUtilities.findRelativeNestedJavaFiles("tests", "hardwarebacked", "general"));
+                TestUtilities.findRelativeNestedJavaFiles(
+                        "tests", "messagedigest", "cryptoapibench/brokenhash", "general"));
     }
 }
