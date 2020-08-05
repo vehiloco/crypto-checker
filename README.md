@@ -162,6 +162,14 @@ tests/cipher/CipherTest.java:70: error: [algorithm.not.allowed] Algorithm: RSA/N
 16 errors
 ```
 
+## Tests
+
+To run all the basic tests (including test cases from cryptoapi-bench):
+
+```bash
+./gradlew test
+```
+
 ## Run the Crypto Checker with the whole project
 
 [demo](./demo) is a simple Android project which integrates with the Crypto Checker. Every time
