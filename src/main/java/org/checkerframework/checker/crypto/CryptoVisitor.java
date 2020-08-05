@@ -103,7 +103,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
         List<String> algosOrProvidersBeingUsed = getAlgosOrProvidersBeingUsed(stringValAnnoMirror);
 
         if (algosOrProvidersBeingUsed.isEmpty()) {
-            throw new BugInCF("The current using algorithms or providers list is emtpy.");
+            throw new BugInCF("The current using algorithms or providers list is empty.");
         }
 
         if (allowedAlgoAnnoMirror != null) {
