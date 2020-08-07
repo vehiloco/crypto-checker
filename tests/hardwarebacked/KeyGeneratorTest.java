@@ -30,5 +30,13 @@ class KeyGeneratorTest {
 
         // :: error: provider.not.allowed
         KeyGenerator.getInstance("AES", "WrongProvider");
+
+        // MD5 will still be reported
+        // :: error: algorithm.not.allowed
+        KeyGenerator.getInstance("Hmac" + (high_security ? "SHA512" : "MD5"), "AndroidKeyStore");
+    }
+
+    boolean high_security() {
+        return true;
     }
 }

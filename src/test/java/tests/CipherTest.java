@@ -16,6 +16,7 @@ public class CipherTest extends CheckerFrameworkPerFileTest {
                 "cipher",
                 "-Anomsgtext",
                 "-Astubs=cipher.astub",
+                "-AnonNullStringsConcatenation",
                 "-nowarn");
     }
 

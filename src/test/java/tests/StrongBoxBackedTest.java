@@ -16,6 +16,7 @@ public class StrongBoxBackedTest extends CheckerFrameworkPerFileTest {
                 "strongboxbacked",
                 "-Anomsgtext",
                 "-Astubs=strongboxbacked.astub",
+                "-AnonNullStringsConcatenation",
                 "-nowarn",
                 "-Alint=strongboxbacked");
     }

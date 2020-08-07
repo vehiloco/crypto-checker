@@ -16,6 +16,7 @@ public class MessageDigestTest extends CheckerFrameworkPerFileTest {
                 "messagedigest",
                 "-Anomsgtext",
                 "-Astubs=messagedigest.astub",
+                "-AnonNullStringsConcatenation",
                 "-nowarn");
     }
 

@@ -16,6 +16,7 @@ public class HardwareBackedTest extends CheckerFrameworkPerFileTest {
                 "hardwarebacked",
                 "-Anomsgtext",
                 "-Astubs=hardwarebacked.astub",
+                "-AnonNullStringsConcatenation",
                 "-nowarn");
     }
 

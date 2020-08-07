@@ -17,6 +17,7 @@ public class PropertyFileTest extends CheckerFrameworkPerFileTest {
                 "-Anomsgtext",
                 "-Astubs=cipher.astub",
                 "-AhandlePropertyFile",
+                "-AnonNullStringsConcatenation",
                 "-nowarn");
     }
 
