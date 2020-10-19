@@ -64,7 +64,7 @@ code style.
 
 ### The subtyping hierarchy
 
-<div style="text-align: center;"><img src="http://ww1.sinaimg.cn/large/005UlHJLgy1gdbqdv1k59j30ev06ywek.jpg" alt="Subtyping Hierarchy"/></div>
+<div style="text-align: center;"><img src="./subtyping_hierarchy.jpeg" alt="Subtyping Hierarchy"/></div>
 
 For two `@AllowedAlgorithms` or two `@AllowedProviders`, the subtyping rule depends on the values.
 For example:
