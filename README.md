@@ -4,4 +4,4 @@ The Crypto Checker is a pluggable type system built on the Checker Framework. It
 
 The Crypto Checker aims to be sound, which means that a false positive may be reported if your code is too complicated for it to understand. In this case, the Crypto Checker also helps you improve your code style.
 
-See [vehiloco.github.io/crypto-checker/](vehiloco.github.io/crypto-checker/) for more information.
+See [vehiloco.github.io/crypto-checker/](https://vehiloco.github.io/crypto-checker/) for more information.
