@@ -28,7 +28,7 @@ done
 WORKING_DIR=$(pwd)
 cd "$WORKING_DIR"
 
-typecheck_cmd="python $DLJC/dljc -t checker --checker $CHECKER --stub $STUBFILE -- $build_cmd"
+typecheck_cmd="python3 $DLJC/dljc -t checker --checker $CHECKER --stub $STUBFILE -- $build_cmd"
 
 echo "============ Important variables ============="
 echo "JSR308: $JSR308"
