@@ -11,6 +11,11 @@ The Crypto Checker aims to be sound, which means that a false positive may be re
 is too complicated for it to understand. In this case, the Crypto Checker also helps you improve your 
 code style.
 
+For more details see this pre-print of the FTfJP 2021 paper
+[Ensuring Correct Cryptographic Algorithm and Provider Usage at Compile
+Time](2021-06-04-Crypto-Checker-FTfJP-2021-preprint.pdf).
+
+
 ## The Crypto Checker annotations
 
  - `@AllowedAlgorithms(String[])`: Indicates that a list of algorithms is allowed by the provided
