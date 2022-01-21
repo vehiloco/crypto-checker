@@ -105,7 +105,7 @@ publishing {
 					def dependencyNode = dependenciesNode.appendNode('dependency')
 					dependencyNode.appendNode("groupId", "org.checkerframework")
 					dependencyNode.appendNode("artifactId", "checker")
-					dependencyNode.appendNode("version", "3.21.1")
+					dependencyNode.appendNode("version", "${versions.checkerFramework}")
 					dependencyNode.appendNode("systemPath", projectDir.toString() + "$buildDir/libs/checker.jar")
 				}
 			}
