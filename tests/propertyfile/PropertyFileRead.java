@@ -26,7 +26,7 @@ class PropertyFileRead {
         Properties prop = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFile);
         prop.load(inputStream);
-        // :: error: argument.type.incompatible
+        // :: error: argument
         Cipher.getInstance(prop.getProperty("NOSUCHKEY"));
     }
 }

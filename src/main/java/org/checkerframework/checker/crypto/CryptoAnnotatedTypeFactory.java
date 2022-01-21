@@ -98,6 +98,7 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             } else {
                 return CryptoAnnotatedTypeFactory.this.BOTTOM;
             }
+            // return CryptoAnnotatedTypeFactory.this.ALLOWEDALGORITHMS;
         }
 
         @Override
@@ -114,6 +115,7 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             } else {
                 return CryptoAnnotatedTypeFactory.this.UNKNOWNALGORITHMORPROVIDER;
             }
+            // return CryptoAnnotatedTypeFactory.this.ALLOWEDALGORITHMS;
         }
 
         private boolean compareAllowedAlgorithmOrProviderTypes(
