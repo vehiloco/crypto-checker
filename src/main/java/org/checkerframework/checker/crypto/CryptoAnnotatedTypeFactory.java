@@ -93,18 +93,7 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 AnnotationMirror a2,
                 QualifierKind qualifierKind2,
                 QualifierKind glbKind) {
-<<<<<<< HEAD
-            if (qualifierKind1.isBottom()) {
-                return a1;
-            } else if (qualifierKind2.isBottom()) {
-                return a2;
-            } else {
-                return CryptoAnnotatedTypeFactory.this.BOTTOM;
-            }
-            // return CryptoAnnotatedTypeFactory.this.ALLOWEDALGORITHMS;
-=======
             return CryptoAnnotatedTypeFactory.this.BOTTOM;
->>>>>>> 6105fce (fix testing code: remove deprecated error)
         }
 
         @Override
@@ -114,18 +103,7 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 AnnotationMirror a2,
                 QualifierKind qualifierKind2,
                 QualifierKind glbKind) {
-<<<<<<< HEAD
-            if (qualifierKind1.isBottom()) {
-                return a2;
-            } else if (qualifierKind2.isBottom()) {
-                return a1;
-            } else {
-                return CryptoAnnotatedTypeFactory.this.UNKNOWNALGORITHMORPROVIDER;
-            }
-            // return CryptoAnnotatedTypeFactory.this.ALLOWEDALGORITHMS;
-=======
             return CryptoAnnotatedTypeFactory.this.UNKNOWNALGORITHMORPROVIDER;
->>>>>>> 6105fce (fix testing code: remove deprecated error)
         }
 
         private boolean compareAllowedAlgorithmOrProviderTypes(
