@@ -11,9 +11,8 @@ import org.checkerframework.checker.crypto.qual.Bottom;
 import org.checkerframework.checker.crypto.qual.UnknownAlgorithmOrProvider;
 import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
 import org.checkerframework.common.basetype.BaseTypeChecker;
-import org.checkerframework.framework.type.MostlyNoElementQualifierHierarchy;
+import org.checkerframework.framework.type.ElementQualifierHierarchy;
 import org.checkerframework.framework.type.QualifierHierarchy;
-import org.checkerframework.framework.util.QualifierKind;
 import org.checkerframework.javacutil.AnnotationBuilder;
 import org.checkerframework.javacutil.AnnotationUtils;
 
@@ -41,16 +40,7 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         return new CryptoQualifierHierarchy(this.getSupportedTypeQualifiers(), elements);
     }
 
-    private final class CryptoQualifierHierarchy extends MostlyNoElementQualifierHierarchy {
-
-        /** Qualifier kind for the @{@link UnknownAlgorithmOrProvider} annotation. */
-        private final QualifierKind KIND_UNKNOWNALGORITHMORPROVIDER;
-        /** Qualifier kind for the @{@link AllowedAlgorithms} annotation. */
-        private final QualifierKind KIND_ALLOWEDALGORITHMS;
-        /** Qualifier kind for the @{@link AllowedProviders} annotation. */
-        private final QualifierKind KIND_ALLOWPROVIDERS;
-        /** Qualifier kind for the @{@link Bottom} annotation. */
-        private final QualifierKind KIND_BOTTOM;
+    private final class CryptoQualifierHierarchy extends ElementQualifierHierarchy {
 
         /**
          * Creates a CryptoQualifierHierarchy from the given classes.
@@ -61,48 +51,34 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         public CryptoQualifierHierarchy(
                 Collection<Class<? extends Annotation>> qualifierClasses, Elements elements) {
             super(qualifierClasses, elements);
-            KIND_UNKNOWNALGORITHMORPROVIDER = getQualifierKind(UNKNOWNALGORITHMORPROVIDER);
-            KIND_ALLOWEDALGORITHMS = getQualifierKind(ALLOWEDALGORITHMS);
-            KIND_ALLOWPROVIDERS = getQualifierKind(ALLOWPROVIDERS);
-            KIND_BOTTOM = getQualifierKind(BOTTOM);
         }
 
         @Override
-        public boolean isSubtypeWithElements(
-                AnnotationMirror subAnno,
-                QualifierKind subKind,
-                AnnotationMirror superAnno,
-                QualifierKind superKind) {
-            if (superKind == KIND_UNKNOWNALGORITHMORPROVIDER || subKind == KIND_BOTTOM) {
+        public boolean isSubtype(final AnnotationMirror subtype, final AnnotationMirror supertype) {
+            if (AnnotationUtils.areSameByName(supertype, UNKNOWNALGORITHMORPROVIDER)
+                    || AnnotationUtils.areSameByName(subtype, BOTTOM)) {
                 return true;
-            } else if (subKind == KIND_UNKNOWNALGORITHMORPROVIDER || superKind == KIND_BOTTOM) {
+            } else if (AnnotationUtils.areSameByName(subtype, UNKNOWNALGORITHMORPROVIDER)
+                    || AnnotationUtils.areSameByName(supertype, BOTTOM)) {
                 return false;
-            } else if (subKind == KIND_ALLOWEDALGORITHMS && superKind == KIND_ALLOWEDALGORITHMS) {
-                return compareAllowedAlgorithmOrProviderTypes(subAnno, superAnno);
-            } else if (subKind == KIND_ALLOWPROVIDERS && superKind == KIND_ALLOWPROVIDERS) {
-                return compareAllowedAlgorithmOrProviderTypes(subAnno, superAnno);
+            } else if (AnnotationUtils.areSameByName(subtype, ALLOWEDALGORITHMS)
+                    && AnnotationUtils.areSameByName(supertype, ALLOWEDALGORITHMS)) {
+                return compareAllowedAlgorithmOrProviderTypes(subtype, supertype);
+            } else if (AnnotationUtils.areSameByName(subtype, ALLOWPROVIDERS)
+                    && AnnotationUtils.areSameByName(supertype, ALLOWPROVIDERS)) {
+                return compareAllowedAlgorithmOrProviderTypes(subtype, supertype);
             } else {
                 return false;
             }
         }
 
         @Override
-        protected AnnotationMirror greatestLowerBoundWithElements(
-                AnnotationMirror a1,
-                QualifierKind qualifierKind1,
-                AnnotationMirror a2,
-                QualifierKind qualifierKind2,
-                QualifierKind glbKind) {
+        public AnnotationMirror greatestLowerBound(AnnotationMirror a1, AnnotationMirror a2) {
             return CryptoAnnotatedTypeFactory.this.BOTTOM;
         }
 
         @Override
-        protected AnnotationMirror leastUpperBoundWithElements(
-                AnnotationMirror a1,
-                QualifierKind qualifierKind1,
-                AnnotationMirror a2,
-                QualifierKind qualifierKind2,
-                QualifierKind glbKind) {
+        public AnnotationMirror leastUpperBound(AnnotationMirror a1, AnnotationMirror a2) {
             return CryptoAnnotatedTypeFactory.this.UNKNOWNALGORITHMORPROVIDER;
         }
 
