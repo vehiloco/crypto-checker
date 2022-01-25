@@ -38,4 +38,3 @@ jobs:
           echo "REPO_SITE=${owner}" >> $GITHUB_ENV
       - name: Crypto Checker Build
         run: ./gradlew build
-
