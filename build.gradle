@@ -19,7 +19,7 @@ configurations {
 }
 
 ext.versions = [
-		checkerFramework: "3.3.0",
+		checkerFramework: "3.21.1",
 ]
 
 sourceCompatibility = 1.8
@@ -37,6 +37,8 @@ dependencies {
 		implementation files("${CHECKERFRAMEWORK}/checker/dist/jdk8.jar")
 	} else {
 		localDeps "org.checkerframework:checker:${versions.checkerFramework}"
+		localDeps "org.checkerframework:checker-qual:${versions.checkerFramework}"
+		localDeps "org.checkerframework:checker-util:${versions.checkerFramework}"
 	}
 	implementation configurations.localDeps
 
@@ -103,7 +105,7 @@ publishing {
 					def dependencyNode = dependenciesNode.appendNode('dependency')
 					dependencyNode.appendNode("groupId", "org.checkerframework")
 					dependencyNode.appendNode("artifactId", "checker")
-					dependencyNode.appendNode("version", "3.3.0")
+					dependencyNode.appendNode("version", "${versions.checkerFramework}")
 					dependencyNode.appendNode("systemPath", projectDir.toString() + "$buildDir/libs/checker.jar")
 				}
 			}

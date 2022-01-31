@@ -13,8 +13,6 @@ public class Issue16 extends CipherProvider {
 
     private static void test() {
         anotherCase(ANDROID_KEY_STORE_1);
-        // False positive here.
-        // :: error: argument.type.incompatible
         anotherCase(ANDROID_KEY_STORE_2);
         anotherCase(CipherProvider.ANDROID_KEY_STORE_2);
     }

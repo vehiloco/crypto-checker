@@ -59,7 +59,8 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
     protected void commonAssignmentCheck(
             AnnotatedTypeMirror varType,
             ExpressionTree valueExp,
-            @CompilerMessageKey String errorKey) {
+            @CompilerMessageKey String errorKey,
+            Object... extraArgs) {
 
         final AnnotationMirror allowedAlgoAnnoMirror =
                 varType.getAnnotation(AllowedAlgorithms.class);
@@ -95,7 +96,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                 if (allowedAlgosOrProvidersList.isEmpty()) {
                     checker.reportError(valueExp, "allowed.algorithm.or.provider.not.set");
                 }
-                super.commonAssignmentCheck(varType, valueExp, errorKey);
+                super.commonAssignmentCheck(varType, valueExp, errorKey, extraArgs);
             }
             return;
         }
