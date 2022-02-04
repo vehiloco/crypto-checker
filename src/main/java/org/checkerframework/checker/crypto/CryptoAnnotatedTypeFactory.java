@@ -1,9 +1,7 @@
 package org.checkerframework.checker.crypto;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.util.Elements;
@@ -102,15 +100,10 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                     AnnotationUtils.getElementValueArray(a1, element, String.class);
             List<String> a2RegexList =
                     AnnotationUtils.getElementValueArray(a2, element, String.class);
-            ArrayList<String> result = new ArrayList<>();
             // Cal Intersection of a1RegexList and a2RegexList
-            for (String s : a1RegexList) {
-                if (a2RegexList.contains(s)) {
-                    result.add(s);
-                }
-            }
+            a1RegexList.retainAll(a2RegexList);
             return createCryptoAnnotation(
-                    result,
+                    a1RegexList,
                     (Class<? extends Annotation>) AnnotationUtils.annotationMirrorToClass(a1));
         }
 
@@ -141,18 +134,13 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                     AnnotationUtils.getElementValueArray(a1, element, String.class);
             List<String> a2RegexList =
                     AnnotationUtils.getElementValueArray(a2, element, String.class);
-            ArrayList<String> result = new ArrayList<>();
-            // Merge a1RegexList and a2RegexList
-            for (String s : a1RegexList) {
-                result.add(s);
-            }
-            for (String s : a2RegexList) {
-                if (!result.contains(s)) {
-                    result.add(s);
-                }
-            }
+            // Merge a1RegexList and a2RegexList, then remove duplicate elements
+            a1RegexList.addAll(a2RegexList);
+            Set<String> a1Set = new HashSet<>(a1RegexList);
+            a1RegexList.clear();
+            a1RegexList.addAll(a1Set);
             return createCryptoAnnotation(
-                    result,
+                    a1RegexList,
                     (Class<? extends Annotation>) AnnotationUtils.annotationMirrorToClass(a1));
         }
 
