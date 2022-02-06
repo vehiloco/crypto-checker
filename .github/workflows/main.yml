@@ -38,4 +38,4 @@ jobs:
           echo "REPO_SITE=${owner}" >> $GITHUB_ENV
       # TODO: Run benchmarks
       - name: Crypto Checker Build
-        run: ./gradlew build
+        run: ./gradlew build --warning-mode all
