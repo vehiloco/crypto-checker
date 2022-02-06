@@ -3,11 +3,12 @@ plugins {
 }
 
 repositories {
-	jcenter()
+	mavenCentral()
 }
 
 dependencies {
-	implementation 'org.checkerframework:checker:3.3.0'
+	implementation 'io.github.eisop:checker:3.21.2-eisop1'
+	implementation 'io.github.eisop:checker-qual:3.21.2-eisop1'
 }
 
 task copySources(type: Copy) {

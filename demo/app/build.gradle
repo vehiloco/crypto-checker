@@ -38,7 +38,6 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	google()
-	jcenter()
 }
 
 // Crypto Checker configuration start
@@ -61,11 +60,10 @@ dependencies {
 	androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 	// Crypto Checker configuration start
-	ext.checkerFrameworkVersion = '3.3.0'
-	annotationProcessor "org.checkerframework:crypto-checker:0.1-SNAPSHOT"
+	ext.checkerFrameworkVersion = '3.21.2-eisop1'
+	annotationProcessor "io.github.eisop:crypto-checker:0.1-SNAPSHOT"
 	implementation files("../../crypto-checker-qual-android/build/libs/crypto-checker-qual-android.jar")
-	checkerFrameworkAnnotatedJDK files("../../jdk8.jar")
-	compileOnly "org.checkerframework:checker-qual-android:${checkerFrameworkVersion}"
+	compileOnly "io.github.eisop:checker-qual-android:${checkerFrameworkVersion}"
 	errorproneJavac 'com.google.errorprone:javac:9+181-r4173-1'
 	// Crypto Checker configuration end
 }

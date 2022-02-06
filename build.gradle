@@ -1,14 +1,12 @@
 plugins {
 	id "java"
 	id "maven-publish"
-	id "com.diffplug.gradle.spotless" version "3.26.1"
+	id "com.diffplug.spotless" version "6.2.1"
 }
 
 repositories {
-	// Use 'jcenter' for resolving your dependencies.
-	// You can declare any Maven/Ivy/file repository here.
+	mavenCentral()
 	mavenLocal()
-	jcenter()
 }
 
 configurations {
@@ -19,7 +17,7 @@ configurations {
 }
 
 ext.versions = [
-		checkerFramework: "3.21.1",
+	checkerFramework: "3.21.2-eisop1",
 ]
 
 sourceCompatibility = 1.8
@@ -34,11 +32,10 @@ dependencies {
 		}
 		implementation files("${CHECKERFRAMEWORK}/checker/dist/checker-qual.jar")
 		localDeps files("${CHECKERFRAMEWORK}/checker/dist/checker.jar")
-		implementation files("${CHECKERFRAMEWORK}/checker/dist/jdk8.jar")
 	} else {
-		localDeps "org.checkerframework:checker:${versions.checkerFramework}"
-		localDeps "org.checkerframework:checker-qual:${versions.checkerFramework}"
-		localDeps "org.checkerframework:checker-util:${versions.checkerFramework}"
+		localDeps "io.github.eisop:checker:${versions.checkerFramework}"
+		localDeps "io.github.eisop:checker-qual:${versions.checkerFramework}"
+		localDeps "io.github.eisop:checker-util:${versions.checkerFramework}"
 	}
 	implementation configurations.localDeps
 
@@ -46,7 +43,7 @@ dependencies {
 
 	// Testing
 	testImplementation "junit:junit:4.13"
-	testImplementation "org.checkerframework:framework-test:${versions.checkerFramework}"
+	testImplementation "io.github.eisop:framework-test:${versions.checkerFramework}"
 
 	errorproneJavac "com.google.errorprone:javac:9+181-r4173-1"
 }
@@ -95,7 +92,7 @@ spotless {
 publishing {
 	publications {
 		maven(MavenPublication) {
-			groupId = "org.checkerframework"
+			groupId = "io.github.eisop"
 			artifactId = "crypto-checker"
 			version = "0.1-SNAPSHOT"
 			from components.java
@@ -103,7 +100,7 @@ publishing {
 				pom.withXml {
 					def dependenciesNode = asNode().appendNode('dependencies')
 					def dependencyNode = dependenciesNode.appendNode('dependency')
-					dependencyNode.appendNode("groupId", "org.checkerframework")
+					dependencyNode.appendNode("groupId", "io.github.eisop")
 					dependencyNode.appendNode("artifactId", "checker")
 					dependencyNode.appendNode("version", "${versions.checkerFramework}")
 					dependencyNode.appendNode("systemPath", projectDir.toString() + "$buildDir/libs/checker.jar")
