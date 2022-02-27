@@ -17,9 +17,9 @@ class GlbLubTest {
         } else {
             either = prov;
         }
-        // :: error: assignment
+        // :: error: (assignment.type.incompatible)
         algo = either;
-        // :: error: assignment
+        // :: error: (assignment.type.incompatible)
         prov = either;
     }
 
@@ -33,9 +33,9 @@ class GlbLubTest {
         } else {
             either = algo2;
         }
-        // :: error: assignment
+        // :: error: (assignment.type.incompatible)
         algo1 = either;
-        // :: error: assignment
+        // :: error: (assignment.type.incompatible)
         algo2 = either;
         @AllowedAlgorithms({"algorithm1", "algorithm2", "algorithm3"})
         String algo3 = either;
@@ -51,9 +51,9 @@ class GlbLubTest {
         } else {
             either = prov2;
         }
-        // :: error: assignment
+        // :: error: (assignment.type.incompatible)
         prov1 = either;
-        // :: error: assignment
+        // :: error: (assignment.type.incompatible)
         prov2 = either;
         @AllowedProviders({"provider1", "provider2", "provider3"})
         String prov3 = either;
@@ -64,12 +64,12 @@ class GlbLubTest {
     }
 
     void testGlb1() {
-        // :: warning: [unchecked] unchecked conversion
-        MyClass1<? extends @AllowedAlgorithms({"a", "c", "e"}) String> f1 = new MyClass1();
+        // ::error: (assignment.type.incompatible)
+        MyClass1<? extends @AllowedAlgorithms({"a", "c", "e"}) String> f1 = new MyClass1<>();
         @AllowedAlgorithms({"a", "c"})
         String x = f1.key;
         @AllowedAlgorithms({"a", "e"})
-        // ::error: (assignment)
+        // ::error: (assignment.type.incompatible)
         String y = f1.key;
     }
 
@@ -78,8 +78,8 @@ class GlbLubTest {
     }
 
     void testGlb2() {
-        // :: warning: [unchecked] unchecked conversion
-        MyClass2<? extends @AllowedAlgorithms("a") String> f2 = new MyClass2();
+        // ::error: (assignment.type.incompatible)
+        MyClass2<? extends @AllowedAlgorithms("a") String> f2 = new MyClass2<>();
         @AllowedAlgorithms({"e"})
         String x = f2.key;
     }
@@ -89,8 +89,8 @@ class GlbLubTest {
     }
 
     void testGlb3() {
-        // :: warning: [unchecked] unchecked conversion
-        MyClass3<? extends @AllowedAlgorithms("a") String> f3 = new MyClass3();
+        // ::error: (assignment.type.incompatible)
+        MyClass3<? extends @AllowedAlgorithms("a") String> f3 = new MyClass3<>();
         @AllowedAlgorithms({"b"})
         String x = f3.key;
         @AllowedProviders({"b"})
@@ -102,12 +102,11 @@ class GlbLubTest {
     }
 
     void testGlb4() {
-        // :: warning: [unchecked] unchecked conversion
-        MyClass4<? extends @UnknownAlgorithmOrProvider String> f4 = new MyClass4();
+        MyClass4<? extends @UnknownAlgorithmOrProvider String> f4 = new MyClass4<>();
         @AllowedAlgorithms({"a"})
         String x = f4.key;
         @AllowedAlgorithms({"b"})
-        // ::error: (assignment)
+        // ::error: (assignment.type.incompatible)
         String y = f4.key;
     }
 }

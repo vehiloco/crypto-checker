@@ -33,6 +33,20 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     /** The @{@link UnknownAlgorithmOrProvider} annotation. */
     protected final AnnotationMirror UNKNOWNALGORITHMORPROVIDER =
             AnnotationBuilder.fromClass(elements, UnknownAlgorithmOrProvider.class);
+    /** The Annotation Class.AllowedAlgorithms() method. */
+    protected final ExecutableElement classAllowedAlgorithms =
+            TreeUtils.getMethod(
+                    AnnotationUtils.annotationMirrorToClass(ALLOWEDALGORITHMS),
+                    "value",
+                    0,
+                    processingEnv);
+    /** The Annotation Class.AllowedProviders() method. */
+    protected final ExecutableElement classAllowedProviders =
+            TreeUtils.getMethod(
+                    AnnotationUtils.annotationMirrorToClass(ALLOWPROVIDERS),
+                    "value",
+                    0,
+                    processingEnv);
 
     public CryptoAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
@@ -80,7 +94,7 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         public AnnotationMirror greatestLowerBound(AnnotationMirror a1, AnnotationMirror a2) {
             if (AnnotationUtils.areSameByName(a1, BOTTOM)
                     || AnnotationUtils.areSameByName(a2, BOTTOM)) {
-                return CryptoAnnotatedTypeFactory.this.BOTTOM;
+                return BOTTOM;
             }
             if (AnnotationUtils.areSameByName(a1, UNKNOWNALGORITHMORPROVIDER)) {
                 return a2;
@@ -92,29 +106,30 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                             && AnnotationUtils.areSameByName(a2, ALLOWPROVIDERS))
                     || (AnnotationUtils.areSameByName(a2, ALLOWEDALGORITHMS)
                             && AnnotationUtils.areSameByName(a1, ALLOWPROVIDERS))) {
-                return CryptoAnnotatedTypeFactory.this.BOTTOM;
+                return BOTTOM;
             }
 
             // Both a1 and a2 are the same annotation kind.
             ExecutableElement element =
-                    TreeUtils.getMethod(
-                            AnnotationUtils.annotationMirrorToClass(a1), "value", 0, processingEnv);
+                    (AnnotationUtils.areSameByName(a1, ALLOWEDALGORITHMS))
+                            ? classAllowedAlgorithms
+                            : classAllowedProviders;
             List<String> a1RegexList =
                     AnnotationUtils.getElementValueArray(a1, element, String.class);
             List<String> a2RegexList =
                     AnnotationUtils.getElementValueArray(a2, element, String.class);
-            // Cal Intersection of a1RegexList and a2RegexList
+            // To get a GLB, retain all elements both in a1RegexList and a2RegexList.
             a1RegexList.retainAll(a2RegexList);
             return createCryptoAnnotation(
-                    a1RegexList,
-                    (Class<? extends Annotation>) AnnotationUtils.annotationMirrorToClass(a1));
+                    (Class<? extends Annotation>) AnnotationUtils.annotationMirrorToClass(a1),
+                    a1RegexList);
         }
 
         @Override
         public AnnotationMirror leastUpperBound(AnnotationMirror a1, AnnotationMirror a2) {
             if (AnnotationUtils.areSameByName(a1, UNKNOWNALGORITHMORPROVIDER)
                     || AnnotationUtils.areSameByName(a2, UNKNOWNALGORITHMORPROVIDER)) {
-                return CryptoAnnotatedTypeFactory.this.UNKNOWNALGORITHMORPROVIDER;
+                return UNKNOWNALGORITHMORPROVIDER;
             }
             if (AnnotationUtils.areSameByName(a1, BOTTOM)) {
                 return a2;
@@ -126,13 +141,14 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                             && AnnotationUtils.areSameByName(a2, ALLOWPROVIDERS))
                     || (AnnotationUtils.areSameByName(a2, ALLOWEDALGORITHMS)
                             && AnnotationUtils.areSameByName(a1, ALLOWPROVIDERS))) {
-                return CryptoAnnotatedTypeFactory.this.UNKNOWNALGORITHMORPROVIDER;
+                return UNKNOWNALGORITHMORPROVIDER;
             }
 
             // Both a1 and a2 are the same annotation kind.
             ExecutableElement element =
-                    TreeUtils.getMethod(
-                            AnnotationUtils.annotationMirrorToClass(a1), "value", 0, processingEnv);
+                    (AnnotationUtils.areSameByName(a1, ALLOWEDALGORITHMS))
+                            ? classAllowedAlgorithms
+                            : classAllowedProviders;
             List<String> a1RegexList =
                     AnnotationUtils.getElementValueArray(a1, element, String.class);
             List<String> a2RegexList =
@@ -143,8 +159,8 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             a1RegexList.clear();
             a1RegexList.addAll(a1Set);
             return createCryptoAnnotation(
-                    a1RegexList,
-                    (Class<? extends Annotation>) AnnotationUtils.annotationMirrorToClass(a1));
+                    (Class<? extends Annotation>) AnnotationUtils.annotationMirrorToClass(a1),
+                    a1RegexList);
         }
 
         private boolean compareAllowedAlgorithmOrProviderTypes(
@@ -156,8 +172,15 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             return supertypeRegexList.containsAll(subtypeRegexList);
         }
 
+        /**
+         * Creates a Crypto AnnotationMirror with new values.
+         *
+         * @param annoClass classes of annotations, only classes of AllowedAlgorithms and
+         *     AllowedProviders will be used here.
+         * @param values new annotation values.
+         */
         private AnnotationMirror createCryptoAnnotation(
-                List<String> values, Class<? extends Annotation> annoClass) {
+                Class<? extends Annotation> annoClass, List<String> values) {
             AnnotationBuilder builder = new AnnotationBuilder(processingEnv, annoClass);
             builder.setValue("value", values);
             return builder.build();
