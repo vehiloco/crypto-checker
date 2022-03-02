@@ -1,5 +1,7 @@
 # Crypto Checker
 
+[![Build Status](https://github.com/vehiloco/crypto-checker/workflows/CI/badge.svg?branch=master)](https://github.com/vehiloco/crypto-checker/workflows/CI/badge.svg?branch=master)
+
 The Crypto Checker is a pluggable type system built on the Checker Framework. It
 can help you find whether there are any weak or unsupported crypto algorithms
 and the unsupported algorithm providers being used in your program. If the
