@@ -2,9 +2,8 @@ package org.checkerframework.checker.crypto;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.util.Elements;
@@ -12,12 +11,15 @@ import org.checkerframework.checker.crypto.qual.AllowedAlgorithms;
 import org.checkerframework.checker.crypto.qual.AllowedProviders;
 import org.checkerframework.checker.crypto.qual.Bottom;
 import org.checkerframework.checker.crypto.qual.UnknownAlgorithmOrProvider;
+import org.checkerframework.checker.signature.qual.CanonicalName;
 import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
 import org.checkerframework.common.basetype.BaseTypeChecker;
-import org.checkerframework.framework.type.ElementQualifierHierarchy;
 import org.checkerframework.framework.type.QualifierHierarchy;
+import org.checkerframework.framework.type.SubtypeIsSubsetQualifierHierarchy;
+import org.checkerframework.framework.util.QualifierKind;
 import org.checkerframework.javacutil.AnnotationBuilder;
 import org.checkerframework.javacutil.AnnotationUtils;
+import org.checkerframework.javacutil.BugInCF;
 import org.checkerframework.javacutil.TreeUtils;
 
 public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
@@ -28,25 +30,25 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     /** The @{@link AllowedProviders} annotation. */
     protected final AnnotationMirror ALLOWPROVIDERS =
             AnnotationBuilder.fromClass(elements, AllowedProviders.class);
-    /** The @{@link Bottom} annotation. */
-    protected final AnnotationMirror BOTTOM = AnnotationBuilder.fromClass(elements, Bottom.class);
-    /** The @{@link UnknownAlgorithmOrProvider} annotation. */
-    protected final AnnotationMirror UNKNOWNALGORITHMORPROVIDER =
-            AnnotationBuilder.fromClass(elements, UnknownAlgorithmOrProvider.class);
-    /** The Annotation Class.AllowedAlgorithms() method. */
-    protected final ExecutableElement classAllowedAlgorithms =
-            TreeUtils.getMethod(
-                    AnnotationUtils.annotationMirrorToClass(ALLOWEDALGORITHMS),
-                    "value",
-                    0,
-                    processingEnv);
-    /** The Annotation Class.AllowedProviders() method. */
-    protected final ExecutableElement classAllowedProviders =
-            TreeUtils.getMethod(
-                    AnnotationUtils.annotationMirrorToClass(ALLOWPROVIDERS),
-                    "value",
-                    0,
-                    processingEnv);
+
+    /** The fully-qualified name of {@link UnknownAlgorithmOrProvider}. */
+    protected static final @CanonicalName String UNKNOWNALGORITHMORPROVIDER_NAME =
+            UnknownAlgorithmOrProvider.class.getCanonicalName();
+    /** The fully-qualified name of {@link AllowedAlgorithms}. */
+    protected static final @CanonicalName String ALLOWEDALGORITHMS_NAME =
+            AllowedAlgorithms.class.getCanonicalName();
+    /** The fully-qualified name of {@link AllowedProviders}. */
+    protected static final @CanonicalName String ALLOWPROVIDERS_NAME =
+            AllowedProviders.class.getCanonicalName();
+    /** The fully-qualified name of {@link Bottom}. */
+    protected static final @CanonicalName String BOTTOM_NAME = Bottom.class.getCanonicalName();
+
+    /** The {@link AllowedAlgorithms#value} element/argument. */
+    protected final ExecutableElement allowedAlgorithmsValueElement =
+            TreeUtils.getMethod(AllowedAlgorithms.class, "value", 0, processingEnv);
+    /** The {@link AllowedProviders#value} element/argument. */
+    protected final ExecutableElement allowedProvidersValueElement =
+            TreeUtils.getMethod(AllowedProviders.class, "value", 0, processingEnv);
 
     public CryptoAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
@@ -58,7 +60,19 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         return new CryptoQualifierHierarchy(this.getSupportedTypeQualifiers(), elements);
     }
 
-    private final class CryptoQualifierHierarchy extends ElementQualifierHierarchy {
+    private final class CryptoQualifierHierarchy extends SubtypeIsSubsetQualifierHierarchy {
+
+        /** Qualifier kind for the @{@link UnknownAlgorithmOrProvider} annotation. */
+        private final QualifierKind UNKNOWNALGORITHMORPROVIDER_KIND;
+
+        /** Qualifier kind for the @{@link AllowedAlgorithms} annotation. */
+        private final QualifierKind ALLOWEDALGORITHMS_KIND;
+
+        /** Qualifier kind for the @{@link AllowedProviders} annotation. */
+        private final QualifierKind ALLOWPROVIDERS_KIND;
+
+        /** Qualifier kind for the @{@link Bottom} annotation. */
+        private final QualifierKind BOTTOM_KIND;
 
         /**
          * Creates a CryptoQualifierHierarchy from the given classes.
@@ -68,122 +82,73 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
          */
         public CryptoQualifierHierarchy(
                 Collection<Class<? extends Annotation>> qualifierClasses, Elements elements) {
-            super(qualifierClasses, elements);
+            super(qualifierClasses, processingEnv);
+            UNKNOWNALGORITHMORPROVIDER_KIND = getQualifierKind(UNKNOWNALGORITHMORPROVIDER_NAME);
+            ALLOWEDALGORITHMS_KIND = getQualifierKind(ALLOWEDALGORITHMS_NAME);
+            ALLOWPROVIDERS_KIND = getQualifierKind(ALLOWPROVIDERS_NAME);
+            BOTTOM_KIND = getQualifierKind(BOTTOM_NAME);
         }
 
         @Override
-        public boolean isSubtype(final AnnotationMirror subtype, final AnnotationMirror supertype) {
-            if (AnnotationUtils.areSameByName(supertype, UNKNOWNALGORITHMORPROVIDER)
-                    || AnnotationUtils.areSameByName(subtype, BOTTOM)) {
+        public boolean isSubtypeWithElements(
+                AnnotationMirror subAnno,
+                QualifierKind subKind,
+                AnnotationMirror superAnno,
+                QualifierKind superKind) {
+            if (subKind == BOTTOM_KIND || superKind == UNKNOWNALGORITHMORPROVIDER_KIND) {
                 return true;
-            } else if (AnnotationUtils.areSameByName(subtype, UNKNOWNALGORITHMORPROVIDER)
-                    || AnnotationUtils.areSameByName(supertype, BOTTOM)) {
+            } else if (subKind == UNKNOWNALGORITHMORPROVIDER_KIND || superKind == BOTTOM_KIND) {
                 return false;
-            } else if (AnnotationUtils.areSameByName(subtype, ALLOWEDALGORITHMS)
-                    && AnnotationUtils.areSameByName(supertype, ALLOWEDALGORITHMS)) {
-                return compareAllowedAlgorithmOrProviderTypes(subtype, supertype);
-            } else if (AnnotationUtils.areSameByName(subtype, ALLOWPROVIDERS)
-                    && AnnotationUtils.areSameByName(supertype, ALLOWPROVIDERS)) {
-                return compareAllowedAlgorithmOrProviderTypes(subtype, supertype);
+            } else if (subKind == ALLOWEDALGORITHMS_KIND && superKind == ALLOWEDALGORITHMS_KIND) {
+                return compareAllowedAlgorithmOrProviderTypes(subAnno, superAnno);
+            } else if (subKind == ALLOWPROVIDERS_KIND && superKind == ALLOWPROVIDERS_KIND) {
+                return compareAllowedAlgorithmOrProviderTypes(subAnno, superAnno);
             } else {
                 return false;
             }
         }
 
-        @Override
-        public AnnotationMirror greatestLowerBound(AnnotationMirror a1, AnnotationMirror a2) {
-            if (AnnotationUtils.areSameByName(a1, BOTTOM)
-                    || AnnotationUtils.areSameByName(a2, BOTTOM)) {
-                return BOTTOM;
-            }
-            if (AnnotationUtils.areSameByName(a1, UNKNOWNALGORITHMORPROVIDER)) {
-                return a2;
-            }
-            if (AnnotationUtils.areSameByName(a2, UNKNOWNALGORITHMORPROVIDER)) {
-                return a1;
-            }
-            if ((AnnotationUtils.areSameByName(a1, ALLOWEDALGORITHMS)
-                            && AnnotationUtils.areSameByName(a2, ALLOWPROVIDERS))
-                    || (AnnotationUtils.areSameByName(a2, ALLOWEDALGORITHMS)
-                            && AnnotationUtils.areSameByName(a1, ALLOWPROVIDERS))) {
-                return BOTTOM;
-            }
-
-            // Both a1 and a2 are the same annotation kind.
-            ExecutableElement element =
-                    (AnnotationUtils.areSameByName(a1, ALLOWEDALGORITHMS))
-                            ? classAllowedAlgorithms
-                            : classAllowedProviders;
-            List<String> a1RegexList =
-                    AnnotationUtils.getElementValueArray(a1, element, String.class);
-            List<String> a2RegexList =
-                    AnnotationUtils.getElementValueArray(a2, element, String.class);
-            // To get a GLB, retain all elements both in a1RegexList and a2RegexList.
-            a1RegexList.retainAll(a2RegexList);
-            return createCryptoAnnotation(
-                    (Class<? extends Annotation>) AnnotationUtils.annotationMirrorToClass(a1),
-                    a1RegexList);
-        }
-
-        @Override
-        public AnnotationMirror leastUpperBound(AnnotationMirror a1, AnnotationMirror a2) {
-            if (AnnotationUtils.areSameByName(a1, UNKNOWNALGORITHMORPROVIDER)
-                    || AnnotationUtils.areSameByName(a2, UNKNOWNALGORITHMORPROVIDER)) {
-                return UNKNOWNALGORITHMORPROVIDER;
-            }
-            if (AnnotationUtils.areSameByName(a1, BOTTOM)) {
-                return a2;
-            }
-            if (AnnotationUtils.areSameByName(a2, BOTTOM)) {
-                return a1;
-            }
-            if ((AnnotationUtils.areSameByName(a1, ALLOWEDALGORITHMS)
-                            && AnnotationUtils.areSameByName(a2, ALLOWPROVIDERS))
-                    || (AnnotationUtils.areSameByName(a2, ALLOWEDALGORITHMS)
-                            && AnnotationUtils.areSameByName(a1, ALLOWPROVIDERS))) {
-                return UNKNOWNALGORITHMORPROVIDER;
-            }
-
-            // Both a1 and a2 are the same annotation kind.
-            ExecutableElement element =
-                    (AnnotationUtils.areSameByName(a1, ALLOWEDALGORITHMS))
-                            ? classAllowedAlgorithms
-                            : classAllowedProviders;
-            List<String> a1RegexList =
-                    AnnotationUtils.getElementValueArray(a1, element, String.class);
-            List<String> a2RegexList =
-                    AnnotationUtils.getElementValueArray(a2, element, String.class);
-            // Merge a1RegexList and a2RegexList, then remove duplicate elements
-            a1RegexList.addAll(a2RegexList);
-            Set<String> a1Set = new HashSet<>(a1RegexList);
-            a1RegexList.clear();
-            a1RegexList.addAll(a1Set);
-            return createCryptoAnnotation(
-                    (Class<? extends Annotation>) AnnotationUtils.annotationMirrorToClass(a1),
-                    a1RegexList);
-        }
-
         private boolean compareAllowedAlgorithmOrProviderTypes(
                 final AnnotationMirror subtype, final AnnotationMirror supertype) {
+            ExecutableElement element =
+                    (AnnotationUtils.areSameByName(subtype, ALLOWEDALGORITHMS))
+                            ? allowedAlgorithmsValueElement
+                            : allowedProvidersValueElement;
             List<String> supertypeRegexList =
-                    AnnotationUtils.getElementValueArray(supertype, "value", String.class, true);
+                    AnnotationUtils.getElementValueArray(
+                            supertype, element, String.class, Collections.emptyList());
             List<String> subtypeRegexList =
-                    AnnotationUtils.getElementValueArray(subtype, "value", String.class, true);
+                    AnnotationUtils.getElementValueArray(
+                            subtype, element, String.class, Collections.emptyList());
             return supertypeRegexList.containsAll(subtypeRegexList);
         }
 
         /**
          * Creates a Crypto AnnotationMirror with new values.
          *
-         * @param annoClass classes of annotations, only classes of AllowedAlgorithms and
-         *     AllowedProviders will be used here.
-         * @param values new annotation values.
+         * @param annoClass class of an annotation, only class of AllowedAlgorithms or
+         *     AllowedProviders will be used here
+         * @param values new annotation values
          */
         private AnnotationMirror createCryptoAnnotation(
                 Class<? extends Annotation> annoClass, List<String> values) {
             AnnotationBuilder builder = new AnnotationBuilder(processingEnv, annoClass);
             builder.setValue("value", values);
             return builder.build();
+        }
+
+        /**
+         * Returns the qualifier kind for the annotation with the canonical name {@code name}.
+         *
+         * @param name fully qualified annotation name
+         * @return the qualifier kind for the annotation named {@code name}
+         */
+        protected QualifierKind getQualifierKind(@CanonicalName String name) {
+            QualifierKind kind = qualifierKindHierarchy.getQualifierKind(name);
+            if (kind == null) {
+                throw new BugInCF("QualifierKind %s not in hierarchy", name);
+            }
+            return kind;
         }
     }
 }
