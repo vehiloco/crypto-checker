@@ -4,3 +4,23 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: "gradle"
+    directory: "demo/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "gradle"
+    directory: "demo/app/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "gradle"
+    directory: "crypto-checker-qual/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "gradle"
+    directory: "crypto-checker-qual-android/"
+    schedule:
+      interval: "daily"
