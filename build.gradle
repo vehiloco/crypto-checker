@@ -74,6 +74,8 @@ tasks.withType(JavaCompile).all {
 	options.compilerArgs.add("-Xlint:all")
 }
 
+
+
 spotless {
 	java {
 		target "src/**/*.java", "tests/**/*.java"
