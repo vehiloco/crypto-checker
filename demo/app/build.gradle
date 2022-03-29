@@ -64,7 +64,7 @@ dependencies {
 	annotationProcessor "io.github.eisop:crypto-checker:0.1-SNAPSHOT"
 	implementation files("../../crypto-checker-qual-android/build/libs/crypto-checker-qual-android.jar")
 	compileOnly "io.github.eisop:checker-qual-android:${checkerFrameworkVersion}"
-	errorproneJavac 'com.google.errorprone:javac:9+181-r4173-1'
+	errorproneJavac 'com.google.errorprone:javac:1+'
 	// Crypto Checker configuration end
 }
 
