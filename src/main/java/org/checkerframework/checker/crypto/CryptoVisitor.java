@@ -4,6 +4,7 @@ import com.sun.source.tree.ExpressionTree;
 import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.Tree;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -20,11 +21,7 @@ import org.checkerframework.common.value.ValueChecker;
 import org.checkerframework.common.value.qual.BoolVal;
 import org.checkerframework.common.value.qual.StringVal;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
-import org.checkerframework.javacutil.AnnotationUtils;
-import org.checkerframework.javacutil.BugInCF;
-import org.checkerframework.javacutil.TreeUtils;
-import org.checkerframework.javacutil.TypeAnnotationUtils;
-import org.checkerframework.javacutil.TypesUtils;
+import org.checkerframework.javacutil.*;
 
 public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
 
@@ -32,9 +29,30 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
 
     final ProcessingEnvironment env;
 
+    /** The @{@link AllowedAlgorithms} annotation. */
+    protected final AnnotationMirror ALLOWEDALGORITHMS =
+            AnnotationBuilder.fromClass(elements, AllowedAlgorithms.class);
+
+    /** The {@link AllowedAlgorithms#value} element/argument. */
+    protected final ExecutableElement allowedAlgorithmsValueElement;
+
+    /** The {@link AllowedProviders#value} element/argument. */
+    protected final ExecutableElement allowedProvidersValueElement;
+
+    /** The {@link StringVal#value} element/argument. */
+    protected final ExecutableElement stringValValueElement;
+
+    /** The {@link BoolVal#value} element/argument. */
+    protected final ExecutableElement boolValValueElement;
+
     public CryptoVisitor(final BaseTypeChecker checker) {
         super(checker);
         env = checker.getProcessingEnvironment();
+        allowedAlgorithmsValueElement =
+                TreeUtils.getMethod(AllowedAlgorithms.class, "value", 0, env);
+        allowedProvidersValueElement = TreeUtils.getMethod(AllowedProviders.class, "value", 0, env);
+        stringValValueElement = TreeUtils.getMethod(StringVal.class, "value", 0, env);
+        boolValValueElement = TreeUtils.getMethod(BoolVal.class, "value", 0, env);
     }
 
     @Override
@@ -44,7 +62,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
             AnnotationMirror booleanValAnnoMirror = getBooleanValAnnoMirror(valueExp);
             List<Boolean> booleanValueList =
                     AnnotationUtils.getElementValueArray(
-                            booleanValAnnoMirror, "value", Boolean.class, true);
+                            booleanValAnnoMirror, boolValValueElement, Boolean.class);
             if (booleanValueList.size() != 1) {
                 throw new BugInCF("Size of booleanValueList should always be 1");
             }
@@ -137,7 +155,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
         if (stringValAnnoMirror != null) {
             algosOrProvidersList =
                     AnnotationUtils.getElementValueArray(
-                            stringValAnnoMirror, "value", String.class, true);
+                            stringValAnnoMirror, stringValValueElement, String.class);
             algosOrProvidersList.replaceAll(String::toUpperCase);
         }
         return algosOrProvidersList;
@@ -214,8 +232,13 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
 
     private List<String> getAllowedAlgosOrProvidersRegexList(AnnotationMirror anno) {
         List<String> allowedAlgosOrProvidersRegexList;
+        ExecutableElement element =
+                (AnnotationUtils.areSameByName(anno, ALLOWEDALGORITHMS))
+                        ? allowedAlgorithmsValueElement
+                        : allowedProvidersValueElement;
         allowedAlgosOrProvidersRegexList =
-                AnnotationUtils.getElementValueArray(anno, "value", String.class, true);
+                AnnotationUtils.getElementValueArray(
+                        anno, element, String.class, Collections.emptyList());
         allowedAlgosOrProvidersRegexList.replaceAll(String::toUpperCase);
         return allowedAlgosOrProvidersRegexList;
     }
