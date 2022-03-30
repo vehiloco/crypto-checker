@@ -6,6 +6,7 @@ import com.sun.source.tree.Tree;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.ExecutableElement;
@@ -39,6 +40,12 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
 
     @Override
     public Void visitMethodInvocation(MethodInvocationTree node, Void p) {
+        Set<Short> s = new HashSet<>();
+        for (short i = 0; i < 100; i++) {
+            s.add(i);
+            s.remove(i - 1);
+        }
+
         if (STRONG_BOX_BACKED_ENABLE && setIsStrongBoxBackedIsCalled(node)) {
             ExpressionTree valueExp = node.getArguments().get(0);
             AnnotationMirror booleanValAnnoMirror = getBooleanValAnnoMirror(valueExp);
