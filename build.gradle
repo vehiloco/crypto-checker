@@ -21,7 +21,7 @@ configurations {
 ext.versions = [
 	checkerFramework: "3.21.3-eisop1",
 	errorproneJavacVersion: "9+181-r4173-1",
-	errorproneCoreVersion: "2.9.0",
+	errorproneCoreVersion: "2.11.0",
 ]
 
 sourceCompatibility = 1.8
