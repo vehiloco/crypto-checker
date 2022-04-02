@@ -21,6 +21,7 @@ configurations {
 ext.versions = [
 	checkerFramework: "3.21.3-eisop1",
 	errorproneJavacVersion: "9+181-r4173-1",
+	errorproneCoreVersion: "2.11.0",
 ]
 
 sourceCompatibility = 1.8
@@ -42,8 +43,9 @@ dependencies {
 	}
 	implementation configurations.localDeps
 
-	errorprone("com.google.errorprone:error_prone_core:2.3.3")
-	errorproneJavac("com.google.errorprone:javac:${versions.errorproneJavacVersion}")
+	errorprone "com.google.errorprone:error_prone_core:${versions.errorproneCoreVersion}"
+	errorproneJavac "com.google.errorprone:javac:${versions.errorproneJavacVersion}"
+
 	// Testing
 	testImplementation "junit:junit:4.13.2"
 	testImplementation "io.github.eisop:framework-test:${versions.checkerFramework}"
