@@ -21,13 +21,18 @@ import org.checkerframework.common.value.ValueChecker;
 import org.checkerframework.common.value.qual.BoolVal;
 import org.checkerframework.common.value.qual.StringVal;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
-import org.checkerframework.javacutil.*;
+import org.checkerframework.javacutil.AnnotationUtils;
+import org.checkerframework.javacutil.BugInCF;
+import org.checkerframework.javacutil.TreeUtils;
+import org.checkerframework.javacutil.TypeAnnotationUtils;
+import org.checkerframework.javacutil.TypesUtils;
+import org.checkerframework.javacutil.AnnotationBuilder;
 
 public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
 
-    final boolean STRONG_BOX_BACKED_ENABLE = checker.getLintOption("strongboxbacked", false);
+    protected final boolean STRONG_BOX_BACKED_ENABLE = checker.getLintOption("strongboxbacked", false);
 
-    final ProcessingEnvironment env;
+    protected final ProcessingEnvironment env;
 
     /** The @{@link AllowedAlgorithms} annotation. */
     protected final AnnotationMirror ALLOWEDALGORITHMS =
