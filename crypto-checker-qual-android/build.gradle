@@ -7,8 +7,8 @@ repositories {
 }
 
 dependencies {
-	implementation 'io.github.eisop:checker:3.21.3-eisop1'
-	implementation 'io.github.eisop:checker-qual:3.21.3-eisop1'
+	implementation 'io.github.eisop:checker:3.21.4-eisop1'
+	implementation 'io.github.eisop:checker-qual:3.21.4-eisop1'
 }
 
 task copySources(type: Copy, dependsOn: ':crypto-checker-qual:copySources') {
