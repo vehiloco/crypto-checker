@@ -238,7 +238,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
     private List<String> getAllowedAlgosOrProvidersRegexList(AnnotationMirror anno) {
         List<String> allowedAlgosOrProvidersRegexList;
         ExecutableElement element =
-                (AnnotationUtils.areSameByName(anno, ALLOWEDALGORITHMS))
+                AnnotationUtils.areSameByName(anno, ALLOWEDALGORITHMS)
                         ? allowedAlgorithmsValueElement
                         : allowedProvidersValueElement;
         allowedAlgosOrProvidersRegexList =
