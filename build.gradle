@@ -78,10 +78,6 @@ sourceSets {
 	}
 }
 
-tasks.withType(JavaCompile).all {
-	options.compilerArgs.add("-Xlint:all")
-}
-
 spotless {
 	java {
 		target "src/**/*.java", "tests/**/*.java"
@@ -168,7 +164,7 @@ afterEvaluate {
 				'-g',
 				'-Werror',
 				"-Xlint:-options,-fallthrough",
-				"-Xlint",
+				"-Xlint:all",
 		]
 		options.encoding = 'UTF-8'
 		options.fork = true
