@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'io.github.eisop:checker:3.25.0-eisop1'
+	implementation 'io.github.eisop:checker:3.26.0-eisop1'
 	implementation 'io.github.eisop:checker-qual:3.25.0-eisop1'
 }
 
