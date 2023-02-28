@@ -1,8 +1,17 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		if (JavaVersion.current() >= JavaVersion.VERSION_11) {
+			classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.16.0'
+		}
+	}
+}
+
 plugins {
 	id "java"
 	id "maven-publish"
-	// Only works on JDK 11+
-	id "com.diffplug.spotless" version "6.13.0" apply false
 	// https://github.com/tbroyer/gradle-errorprone-plugin
 	id 'net.ltgt.errorprone' version '3.0.1'
 }
@@ -59,7 +68,6 @@ dependencies {
 	// Testing
 	testImplementation "junit:junit:4.13.2"
 	testImplementation "io.github.eisop:framework-test:${versions.checkerFramework}"
-
 }
 
 sourceSets {
