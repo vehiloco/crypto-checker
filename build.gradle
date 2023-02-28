@@ -1,7 +1,8 @@
 plugins {
 	id "java"
 	id "maven-publish"
-	id "com.diffplug.spotless" version "6.13.0"
+	// Only works on JDK 11+
+	id "com.diffplug.spotless" version "6.13.0" apply false
 	// https://github.com/tbroyer/gradle-errorprone-plugin
 	id 'net.ltgt.errorprone' version '3.0.1'
 }
@@ -28,6 +29,11 @@ ext.versions = [
 sourceCompatibility = 1.8
 def checkerframework_local = false  // Set this variable to [true] while using local version of checker framework.
 def CHECKERFRAMEWORK = System.getenv("CHECKERFRAMEWORK")
+
+ext {
+	isJava11plus = JavaVersion.current() >= JavaVersion.VERSION_11
+}
+
 
 dependencies {
 	// This dependency is found on compile classpath of this component and consumers.
@@ -78,7 +84,10 @@ sourceSets {
 	}
 }
 
-spotless {
+if (isJava11plus) {
+	apply plugin: 'com.diffplug.spotless'
+
+	spotless {
 	java {
 		target "src/**/*.java", "tests/**/*.java"
 		googleJavaFormat().aosp()
@@ -90,7 +99,9 @@ spotless {
 		indentWithTabs()
 		endWithNewline()
 	}
+	}
 }
+
 
 // Run `./gradlew publishToMavenLocal` to publish your checker to your local Maven repository.
 publishing {
