@@ -1,83 +1,85 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 29
-	buildToolsVersion "29.0.2"
-	defaultConfig {
-		applicationId "com.example.demo"
-		minSdkVersion 23
-		targetSdkVersion 29
-		versionCode 1
-		versionName "1.0"
-		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-	}
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-		}
-		// Crypto Checker configuration start
-		checkTypes {
-			javaCompileOptions.annotationProcessorOptions.
-					classNames.add("org.checkerframework.checker.crypto.CryptoChecker")
-			// Uncomment to do the strongboxbacked checking.
-			// javaCompileOptions.annotationProcessorOptions.arguments.put("lint", "strongboxbacked")
-			javaCompileOptions.annotationProcessorOptions.arguments.put("stubs", "hardwarebacked.astub")
-		}
-		// Crypto Checker configuration end
-	}
-	// Crypto Checker configuration start
-	compileOptions {
-		sourceCompatibility = 1.8
-		targetCompatibility = 1.8
-	}
-	// Crypto Checker configuration end
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.example.demo"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        // Crypto Checker configuration start
+        checkTypes {
+            javaCompileOptions.annotationProcessorOptions.
+                    classNames.add("org.checkerframework.checker.crypto.CryptoChecker")
+            // Uncomment to do the strongboxbacked checking.
+            // javaCompileOptions.annotationProcessorOptions.arguments.put("lint", "strongboxbacked")
+            javaCompileOptions.annotationProcessorOptions.arguments.put("stubs", "hardwarebacked.astub")
+        }
+        // Crypto Checker configuration end
+    }
+    // Crypto Checker configuration start
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    // Crypto Checker configuration end
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()
-	google()
+    mavenLocal()
+    mavenCentral()
+    google()
 }
 
 // Crypto Checker configuration start
 configurations {
-	checkerFrameworkAnnotatedJDK {
-		description = 'a copy of JDK classes with Checker Framework type qualifiers inserted'
-	}
-	errorproneJavac {
-		description = 'required to run the Checker Framework.'
-	}
+    checkerFrameworkAnnotatedJDK {
+        description = 'a copy of JDK classes with Checker Framework type qualifiers inserted'
+    }
+    errorproneJavac {
+        description = 'required to run the Checker Framework.'
+    }
 }
 // Crypto Checker configuration end
 
 dependencies {
-	implementation fileTree(dir: 'libs', include: ['*.jar'])
-	implementation 'androidx.appcompat:appcompat:1.6.1'
-	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-	testImplementation 'junit:junit:4.13.2'
-	androidTestImplementation 'androidx.test:runner:1.5.2'
-	androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-	// Crypto Checker configuration start
-	ext.checkerFrameworkVersion = '3.28.0-eisop1'
-	annotationProcessor "io.github.eisop:crypto-checker:0.1-SNAPSHOT"
-	implementation files("../../crypto-checker-qual-android/build/libs/crypto-checker-qual-android.jar")
-	compileOnly "io.github.eisop:checker-qual-android:${checkerFrameworkVersion}"
-	errorproneJavac 'com.google.errorprone:javac:9+181-r4173-1'
-	// Crypto Checker configuration end
+    // Crypto Checker configuration start
+    ext.checkerFrameworkVersion = '3.28.0-eisop1'
+    annotationProcessor "io.github.eisop:crypto-checker:0.1-SNAPSHOT"
+    implementation files("../../crypto-checker-qual-android/build/libs/crypto-checker-qual-android.jar")
+    compileOnly "io.github.eisop:checker-qual-android:${checkerFrameworkVersion}"
+    errorproneJavac 'com.google.errorprone:javac:9+181-r4173-1'
+    // Crypto Checker configuration end
 }
 
 // Crypto Checker configuration start
 gradle.projectsEvaluated {
-	tasks.withType(JavaCompile).all { compile ->
-		if (compile.name.contains("CheckTypes")) {
-			compile.options.compilerArgs += [
-					"-Xbootclasspath/p:${configurations.checkerFrameworkAnnotatedJDK.asPath}"
-			]
-			options.fork = true
-			options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"]
-		}
-	}
+    tasks.withType(JavaCompile).all { compile ->
+        if (compile.name.contains("CheckTypes")) {
+            compile.options.compilerArgs += [
+                "-Xbootclasspath/p:${configurations.checkerFrameworkAnnotatedJDK.asPath}"
+            ]
+            options.fork = true
+            options.forkOptions.jvmArgs += [
+                "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"
+            ]
+        }
+    }
 }
 // Crypto Checker configuration end
