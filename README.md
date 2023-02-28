@@ -21,3 +21,5 @@ for more information.
 
 When updating the Checker Framework version, make sure to use the same version
 across all `build.gradle` files.
+
+Run `./gradlew :spotlessApply` to reformat the source code.
