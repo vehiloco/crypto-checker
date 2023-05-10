@@ -1,12 +1,14 @@
 package cryptoapibench.brokencrypto;
 
+import org.checkerframework.common.value.qual.StringVal;
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import org.checkerframework.common.value.qual.StringVal;
 
 public class BrokenCryptoABICase4 {
     public void go(@StringVal("RC2") String crypto)

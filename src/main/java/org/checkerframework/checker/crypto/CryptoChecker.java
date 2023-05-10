@@ -1,9 +1,10 @@
 package org.checkerframework.checker.crypto;
 
-import java.util.LinkedHashSet;
 import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.common.value.ValueChecker;
 import org.checkerframework.framework.source.SupportedLintOptions;
+
+import java.util.LinkedHashSet;
 
 @SupportedLintOptions({"strongboxbacked"})
 public class CryptoChecker extends BaseTypeChecker {

@@ -1,5 +1,6 @@
 import java.io.InputStream;
 import java.util.Properties;
+
 import javax.crypto.Cipher;
 
 class PropertyFileRead {
