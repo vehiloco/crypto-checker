@@ -1,17 +1,23 @@
 package cryptoapibench.brokencrypto;
 
+import org.checkerframework.common.value.qual.StringVal;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
 import javax.crypto.*;
-import org.checkerframework.common.value.qual.StringVal;
 
 public class BrokenCryptoABSCase4 {
     Crypto5 crypto;
 
     public BrokenCryptoABSCase4()
-            throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
-                    BadPaddingException, InvalidKeyException, UnsupportedEncodingException {
+            throws NoSuchAlgorithmException,
+                    NoSuchPaddingException,
+                    IllegalBlockSizeException,
+                    BadPaddingException,
+                    InvalidKeyException,
+                    UnsupportedEncodingException {
         crypto = new Crypto5("RC2");
         crypto.encrypt("abc", "");
     }
@@ -29,8 +35,12 @@ class Crypto5 {
     }
 
     public byte[] encrypt(String txt, String passedAlgo)
-            throws UnsupportedEncodingException, InvalidKeyException, BadPaddingException,
-                    IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
+            throws UnsupportedEncodingException,
+                    InvalidKeyException,
+                    BadPaddingException,
+                    IllegalBlockSizeException,
+                    NoSuchAlgorithmException,
+                    NoSuchPaddingException {
         if (passedAlgo.isEmpty()) {
             passedAlgo = defaultAlgo;
         }

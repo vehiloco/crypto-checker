@@ -1,20 +1,26 @@
 package org.cryptoapi.bench.brokenhash;
 
+import org.checkerframework.common.value.qual.StringVal;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import org.checkerframework.common.value.qual.StringVal;
 
 public class BrokenHashABSCase4 {
     CryptoHash4 crypto;
 
     public BrokenHashABSCase4()
-            throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
-                    BadPaddingException, InvalidKeyException, UnsupportedEncodingException {
+            throws NoSuchAlgorithmException,
+                    NoSuchPaddingException,
+                    IllegalBlockSizeException,
+                    BadPaddingException,
+                    InvalidKeyException,
+                    UnsupportedEncodingException {
         crypto = new CryptoHash4("MD2");
         crypto.encrypt("abc", "");
     }
@@ -30,8 +36,12 @@ class CryptoHash4 {
     }
 
     public void encrypt(String str, String passedAlgo)
-            throws UnsupportedEncodingException, InvalidKeyException, BadPaddingException,
-                    IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
+            throws UnsupportedEncodingException,
+                    InvalidKeyException,
+                    BadPaddingException,
+                    IllegalBlockSizeException,
+                    NoSuchAlgorithmException,
+                    NoSuchPaddingException {
         if (passedAlgo.isEmpty()) {
             passedAlgo = crypto;
         }

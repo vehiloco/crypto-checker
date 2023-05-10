@@ -1,8 +1,9 @@
 package org.cryptoapi.bench.brokenhash;
 
+import org.checkerframework.checker.crypto.qual.AllowedAlgorithms;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.checkerframework.checker.crypto.qual.AllowedAlgorithms;
 
 public class BrokenHashABICase1 {
     public static void main(String[] args) throws NoSuchAlgorithmException {

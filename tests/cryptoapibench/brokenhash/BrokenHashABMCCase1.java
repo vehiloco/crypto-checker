@@ -1,8 +1,9 @@
 package org.cryptoapi.bench.brokenhash;
 
+import org.checkerframework.common.value.qual.StringVal;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.checkerframework.common.value.qual.StringVal;
 
 class BrokenHashABMC1 {
     public void go(String str, @StringVal("SHA1") String crypto) throws NoSuchAlgorithmException {
