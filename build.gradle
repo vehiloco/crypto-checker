@@ -46,18 +46,22 @@ ext {
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
+    // TODO: clean up implementation/localDeps duplication.
     if (checkerframework_local) {
         if (CHECKERFRAMEWORK == null) {
             CHECKERFRAMEWORK = "../checker-framework/"
         }
         implementation files("${CHECKERFRAMEWORK}/checker/dist/checker-qual.jar")
+        implementation files("${CHECKERFRAMEWORK}/checker/dist/checker.jar")
         localDeps files("${CHECKERFRAMEWORK}/checker/dist/checker.jar")
     } else {
+        implementation "io.github.eisop:checker:${versions.checkerFramework}"
         localDeps "io.github.eisop:checker:${versions.checkerFramework}"
+        implementation "io.github.eisop:checker-qual:${versions.checkerFramework}"
         localDeps "io.github.eisop:checker-qual:${versions.checkerFramework}"
+        implementation "io.github.eisop:checker-util:${versions.checkerFramework}"
         localDeps "io.github.eisop:checker-util:${versions.checkerFramework}"
     }
-    implementation configurations.localDeps
 
     if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
         javacJar group: 'com.google.errorprone', name: 'javac', version: "${versions.errorproneJavacVersion}"
