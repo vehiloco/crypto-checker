@@ -27,8 +27,7 @@ public class BrokenHashABSCase4 {
 }
 
 class CryptoHash4 {
-    @StringVal("MD2")
-    String crypto;
+    @StringVal("MD2") String crypto;
 
     public CryptoHash4(@StringVal("MD2") String defCrypto)
             throws NoSuchPaddingException, NoSuchAlgorithmException {

@@ -26,8 +26,7 @@ public class BrokenCryptoABSCase2 {
 class Crypto3 {
     Cipher cipher;
 
-    @StringVal("Blowfish")
-    String defaultAlgo;
+    @StringVal("Blowfish") String defaultAlgo;
 
     public Crypto3(@StringVal("Blowfish") String defAlgo)
             throws NoSuchPaddingException, NoSuchAlgorithmException {

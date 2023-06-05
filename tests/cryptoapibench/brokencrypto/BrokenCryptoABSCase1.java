@@ -26,8 +26,7 @@ public class BrokenCryptoABSCase1 {
 class Crypto2 {
     Cipher cipher;
 
-    @StringVal("DES/ECB/PKCS5Padding")
-    String defaultAlgo;
+    @StringVal("DES/ECB/PKCS5Padding") String defaultAlgo;
 
     public Crypto2(@StringVal("DES/ECB/PKCS5Padding") String defAlgo)
             throws NoSuchPaddingException, NoSuchAlgorithmException {

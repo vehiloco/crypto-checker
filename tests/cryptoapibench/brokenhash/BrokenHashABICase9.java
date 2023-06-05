@@ -15,8 +15,7 @@ public class BrokenHashABICase9 {
     public static void method2(String s, @StringVal("SHA1") String cryptoHash)
             throws NoSuchAlgorithmException {
         String str2 = s;
-        @StringVal("SHA1")
-        String hashAlgo = cryptoHash;
+        @StringVal("SHA1") String hashAlgo = cryptoHash;
         method1(str2, hashAlgo);
     }
 
