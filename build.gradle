@@ -99,6 +99,7 @@ if (isJava11plus) {
         java {
             target "src/**/*.java", "tests/**/*.java"
             googleJavaFormat().aosp()
+            formatAnnotations()
             removeUnusedImports()
             importOrder('com', 'jdk', 'lib', 'lombok', 'org', 'java', 'javax')
         }
