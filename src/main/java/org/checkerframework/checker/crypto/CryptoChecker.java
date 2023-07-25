@@ -9,6 +9,7 @@ import java.util.LinkedHashSet;
 @SupportedLintOptions({"strongboxbacked"})
 public class CryptoChecker extends BaseTypeChecker {
 
+    @SuppressWarnings("NonApiType") // Until signature is adapted in the superclass
     @Override
     protected LinkedHashSet<Class<? extends BaseTypeChecker>> getImmediateSubcheckerClasses() {
         LinkedHashSet<Class<? extends BaseTypeChecker>> checkers =
