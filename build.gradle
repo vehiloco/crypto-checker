@@ -35,7 +35,10 @@ ext.versions = [
     errorproneCoreVersion: "2.20.0",
 ]
 
-sourceCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
 def checkerframework_local = false  // Set this variable to [true] while using local version of checker framework.
 def CHECKERFRAMEWORK = System.getenv("CHECKERFRAMEWORK")
 
