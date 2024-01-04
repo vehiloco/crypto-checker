@@ -24,3 +24,8 @@ updates:
     directory: "crypto-checker-qual-android/"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
