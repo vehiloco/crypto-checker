@@ -83,34 +83,35 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
     }
 
     @Override
-    protected void commonAssignmentCheck(
+    protected boolean commonAssignmentCheck(
             AnnotatedTypeMirror varType,
-            ExpressionTree valueExp,
+            ExpressionTree valueExpTree,
             @CompilerMessageKey String errorKey,
             Object... extraArgs) {
-
         final AnnotationMirror allowedAlgoAnnoMirror =
                 varType.getAnnotation(AllowedAlgorithms.class);
-
         final AnnotationMirror allowedProviderAnnoMirror =
                 varType.getAnnotation(AllowedProviders.class);
 
         if (allowedAlgoAnnoMirror == null && allowedProviderAnnoMirror == null) {
-            super.commonAssignmentCheck(varType, valueExp, errorKey);
-            return;
+            return super.commonAssignmentCheck(varType, valueExpTree, errorKey, extraArgs);
         }
 
-        AnnotationMirror stringValAnnoMirror = getStringValAnnoMirror(valueExp);
+        AnnotationMirror stringValAnnoMirror = getStringValAnnoMirror(valueExpTree);
+
+        boolean res = true;
 
         if (stringValAnnoMirror == null) {
             TypeMirror underlying =
                     TypeAnnotationUtils.unannotatedType(varType.getErased().getUnderlyingType());
-            if (!TypesUtils.isString(underlying) || valueExp.getKind() == Tree.Kind.NULL_LITERAL) {
+            if (!TypesUtils.isString(underlying)
+                    || valueExpTree.getKind() == Tree.Kind.NULL_LITERAL) {
                 checker.reportError(
-                        valueExp,
+                        valueExpTree,
                         "type.invalid.annotations.on.use",
                         allowedAlgoAnnoMirror,
                         underlying);
+                res = false;
             } else {
                 List<String> allowedAlgosOrProvidersList;
                 if (allowedAlgoAnnoMirror != null) {
@@ -121,11 +122,14 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                             getAllowedAlgosOrProvidersRegexList(allowedProviderAnnoMirror);
                 }
                 if (allowedAlgosOrProvidersList.isEmpty()) {
-                    checker.reportError(valueExp, "allowed.algorithm.or.provider.not.set");
+                    checker.reportError(valueExpTree, "allowed.algorithm.or.provider.not.set");
+                    res = false;
                 }
-                super.commonAssignmentCheck(varType, valueExp, errorKey, extraArgs);
+                res =
+                        super.commonAssignmentCheck(varType, valueExpTree, errorKey, extraArgs)
+                                && res;
             }
-            return;
+            return res;
         }
 
         List<String> algosOrProvidersBeingUsed = getAlgosOrProvidersBeingUsed(stringValAnnoMirror);
@@ -143,7 +147,8 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                                     allowedAlgosRegexList, algosOrProvidersBeingUsed));
             if (!forbiddenAlgosList.isEmpty()) {
                 final String forbiddenAlgorithms = String.join(", ", forbiddenAlgosList);
-                checker.reportError(valueExp, "algorithm.not.allowed", forbiddenAlgorithms);
+                checker.reportError(valueExpTree, "algorithm.not.allowed", forbiddenAlgorithms);
+                res = false;
             }
         } else {
             List<String> allowedProvidersRegexList =
@@ -154,9 +159,11 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                                     allowedProvidersRegexList, algosOrProvidersBeingUsed));
             if (!forbiddenProvidersList.isEmpty()) {
                 final String forbiddenProviders = String.join(", ", forbiddenProvidersList);
-                checker.reportError(valueExp, "provider.not.allowed", forbiddenProviders);
+                checker.reportError(valueExpTree, "provider.not.allowed", forbiddenProviders);
+                res = false;
             }
         }
+        return res;
     }
 
     private List<String> getAlgosOrProvidersBeingUsed(AnnotationMirror stringValAnnoMirror) {

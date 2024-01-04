@@ -4,16 +4,14 @@ import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.common.value.ValueChecker;
 import org.checkerframework.framework.source.SupportedLintOptions;
 
-import java.util.LinkedHashSet;
+import java.util.Set;
 
 @SupportedLintOptions({"strongboxbacked"})
 public class CryptoChecker extends BaseTypeChecker {
 
-    @SuppressWarnings("NonApiType") // Until signature is adapted in the superclass
     @Override
-    protected LinkedHashSet<Class<? extends BaseTypeChecker>> getImmediateSubcheckerClasses() {
-        LinkedHashSet<Class<? extends BaseTypeChecker>> checkers =
-                super.getImmediateSubcheckerClasses();
+    protected Set<Class<? extends BaseTypeChecker>> getImmediateSubcheckerClasses() {
+        Set<Class<? extends BaseTypeChecker>> checkers = super.getImmediateSubcheckerClasses();
         checkers.add(ValueChecker.class);
         return checkers;
     }

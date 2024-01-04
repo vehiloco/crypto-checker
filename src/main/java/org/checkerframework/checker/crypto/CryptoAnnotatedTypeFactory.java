@@ -28,7 +28,7 @@ public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
          * @param qualifierClasses classes of annotations that are the qualifiers for this hierarchy
          */
         public CryptoQualifierHierarchy(Collection<Class<? extends Annotation>> qualifierClasses) {
-            super(qualifierClasses, processingEnv);
+            super(qualifierClasses, processingEnv, CryptoAnnotatedTypeFactory.this);
         }
     }
 }

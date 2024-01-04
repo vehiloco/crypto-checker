@@ -1,7 +1,4 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
     dependencies {
         if (JavaVersion.current() >= JavaVersion.VERSION_11) {
             classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.23.3'
@@ -29,11 +26,13 @@ configurations {
     localDeps
 }
 
-ext.versions = [
-    checkerFramework: "3.34.0-eisop1",
-    errorproneJavacVersion: "9+181-r4173-1",
-    errorproneCoreVersion: "2.24.0",
-]
+ext {
+    versions = [
+        checkerFramework: "3.42.0-eisop1",
+        errorproneJavacVersion: "9+181-r4173-1",
+        errorproneCoreVersion: "2.24.1",
+    ]
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
