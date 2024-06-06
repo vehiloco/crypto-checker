@@ -79,7 +79,7 @@ public class CryptoVisitor extends BaseTypeVisitor<CryptoAnnotatedTypeFactory> {
                 checker.reportError(node, "strongbox.backed.disabled", valueExp);
             }
         }
-        return super.visitMethodInvocation(node, p);
+        return super.visitMethodInvocation(node, null);
     }
 
     @Override
