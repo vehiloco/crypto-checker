@@ -8,7 +8,7 @@ repositories {
 
 dependencies {
     implementation 'io.github.eisop:checker:3.42.0-eisop3'
-    implementation 'io.github.eisop:checker-qual:3.42.0-eisop3'
+    implementation 'io.github.eisop:checker-qual:3.42.0-eisop4'
 }
 
 task copySources(type: Copy) {
