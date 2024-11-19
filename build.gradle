@@ -30,7 +30,7 @@ ext {
     versions = [
         checkerFramework: "3.42.0-eisop4",
         errorproneJavacVersion: "9+181-r4173-1",
-        errorproneCoreVersion: "2.31.0",
+        errorproneCoreVersion: "2.36.0",
     ]
 }
 
