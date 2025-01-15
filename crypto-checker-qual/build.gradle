@@ -6,9 +6,13 @@ repositories {
     mavenCentral()
 }
 
+ext.versions = [
+    checkerFramework: "3.42.0-eisop5",
+]
+
 dependencies {
-    implementation 'io.github.eisop:checker:3.42.0-eisop5'
-    implementation 'io.github.eisop:checker-qual:3.42.0-eisop5'
+    implementation "io.github.eisop:checker:${versions.checkerFramework}"
+    implementation "io.github.eisop:checker-qual:${versions.checkerFramework}"
 }
 
 task copySources(type: Copy) {

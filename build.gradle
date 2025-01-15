@@ -177,7 +177,6 @@ afterEvaluate {
             jvmArgs += compilerArgsForRunningCF
         }
 
-
         testLogging {
             // Always run the tests
             outputs.upToDateWhen { false }
