@@ -10,6 +10,7 @@ import java.util.Collection;
 
 public class CryptoAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
+    @SuppressWarnings("this-escape")
     public CryptoAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
         this.postInit();
