@@ -196,7 +196,8 @@ afterEvaluate {
         options.compilerArgs += [
             '-g',
             '-Werror',
-            "-Xlint:all",
+            // -options because source 8 is obsolete on newer JDKs
+            "-Xlint:all,-options",
         ]
         options.encoding = 'UTF-8'
         options.fork = true
