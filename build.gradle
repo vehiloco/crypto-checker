@@ -19,7 +19,6 @@ repositories {
 }
 
 configurations {
-    javacJar
     // for putting Error Prone javac in bootclasspath for running tests
     errorproneJavac
     // local dependency
@@ -31,6 +30,28 @@ ext {
         checkerFramework: "3.42.0-eisop5",
         errorproneJavacVersion: "9+181-r4173-1",
         errorproneCoreVersion: "2.36.0",
+    ]
+
+    // Keep in sync with the same variable in checker-framework/build.gradle
+    compilerArgsForRunningCF = [
+        '--add-exports',
+        'jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
+        '--add-exports',
+        'jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+        '--add-exports',
+        'jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED',
+        '--add-exports',
+        'jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED',
+        '--add-exports',
+        'jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
+        '--add-exports',
+        'jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
+        '--add-exports',
+        'jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+        '--add-exports',
+        'jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
+        '--add-opens',
+        'jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED',
     ]
 }
 
@@ -65,9 +86,6 @@ dependencies {
         localDeps "io.github.eisop:checker-util:${versions.checkerFramework}"
     }
 
-    if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
-        javacJar group: 'com.google.errorprone', name: 'javac', version: "${versions.errorproneJavacVersion}"
-    }
     errorprone "com.google.errorprone:error_prone_core:${versions.errorproneCoreVersion}"
     errorproneJavac "com.google.errorprone:javac:${versions.errorproneJavacVersion}"
 
@@ -148,17 +166,18 @@ publishing {
     }
 }
 
-test {
-    if (!JavaVersion.current().java9Compatible) {
-        jvmArgs "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"
-    }
-}
-
 test.dependsOn(":assemble")
 
 afterEvaluate {
     // Configure JUnit tests
     tasks.withType(Test) {
+        if (!JavaVersion.current().java9Compatible) {
+            jvmArgs "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"
+        } else {
+            jvmArgs += compilerArgsForRunningCF
+        }
+
+
         testLogging {
             // Always run the tests
             outputs.upToDateWhen { false }
@@ -203,7 +222,7 @@ afterEvaluate {
         options.fork = true
         if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
             options.forkOptions.jvmArgs += [
-                "-Xbootclasspath/p:${configurations.javacJar.asPath}".toString()
+                "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}".toString()
             ]
             options.errorprone.enabled = false
         } else {
