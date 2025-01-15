@@ -23,7 +23,12 @@ task copySources(type: Copy) {
     include '**/org/checkerframework/checker/crypto/qual/**'
 
     // Make files read only.
-    fileMode(0444)
+    filePermissions {
+        user {
+            read = true
+            write = false
+        }
+    }
 
     into file('src/main/java')
 }

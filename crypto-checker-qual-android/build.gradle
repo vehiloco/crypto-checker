@@ -12,7 +12,7 @@ dependencies {
 }
 
 task copySources(type: Copy, dependsOn: ':crypto-checker-qual:copySources') {
-    description 'Copy crypto-checker-qual source to crypto-checker-qual-android'
+    description = 'Copy crypto-checker-qual source to crypto-checker-qual-android'
 
     includeEmptyDirs = false
     doFirst {
@@ -24,8 +24,19 @@ task copySources(type: Copy, dependsOn: ':crypto-checker-qual:copySources') {
     into file('src/main')
 
     // Not read only because "replaceAnnotations" tasks writes to the files.
-    fileMode(0666)
-    dirMode(0777)
+    filePermissions {
+        user {
+            read = true
+            write = true
+        }
+    }
+    dirPermissions {
+        user {
+            read = true
+            write = true
+            execute = true
+        }
+    }
 }
 
 /**

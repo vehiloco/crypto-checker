@@ -30,7 +30,7 @@ ext {
     versions = [
         checkerFramework: "3.42.0-eisop5",
         errorproneJavacVersion: "9+181-r4173-1",
-        errorproneCoreVersion: "2.31.0",
+        errorproneCoreVersion: "2.36.0",
     ]
 }
 
@@ -112,13 +112,13 @@ if (isJava11plus) {
         format "misc", {
             target "**/.gitignore"
             trimTrailingWhitespace()
-            indentWithTabs()
+            leadingSpacesToTabs()
             endWithNewline()
         }
         groovyGradle {
             target '**/*.gradle'
             greclipse()  // which formatter Spotless should use to format .gradle files.
-            indentWithSpaces(4)
+            leadingTabsToSpaces(4)
             trimTrailingWhitespace()
             // endWithNewline() // Don't want to end empty files with a newline
         }
@@ -165,11 +165,11 @@ afterEvaluate {
             // The following prints out each time a test is passed.
             events "passed", "skipped", "failed", "standardOut", "standardError"
             // Show the found unexpected diagnostics and expected diagnostics not found.
-            exceptionFormat "full"
-            showExceptions true
-            showCauses true
-            showStackTraces true
-            showStandardStreams true
+            exceptionFormat = "full"
+            showExceptions = true
+            showCauses = true
+            showStackTraces = true
+            showStandardStreams = true
         }
         // After each test, print a summary.
         afterSuite { desc, result ->
@@ -206,7 +206,7 @@ afterEvaluate {
             ]
             options.errorprone.enabled = false
         } else {
-            options.errorprone.enabled = true
+            options.errorprone.enabled = (JavaVersion.current() >= JavaVersion.VERSION_17)
             options.forkOptions.jvmArgs += [
                 '--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
                 '--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED',
