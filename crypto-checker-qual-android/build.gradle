@@ -10,6 +10,9 @@ ext.versions = [
     checkerFramework: "3.42.0-eisop5",
 ]
 
+//def checkerframework_local = true  // Set this variable to [true] while using local version of checker framework.
+//def CHECKERFRAMEWORK = "/home/billybai/code/vehiloco/local_CF"
+
 dependencies {
     implementation "io.github.eisop:checker:${versions.checkerFramework}"
     implementation "io.github.eisop:checker-qual:${versions.checkerFramework}"

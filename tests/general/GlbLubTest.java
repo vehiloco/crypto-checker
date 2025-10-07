@@ -64,7 +64,6 @@ class GlbLubTest {
     }
 
     void testGlb1() {
-        // ::error: (assignment.type.incompatible)
         MyClass1<? extends @AllowedAlgorithms({"a", "c", "e"}) String> f1 = new MyClass1<>();
         @AllowedAlgorithms({"a", "c"})
         String x = f1.key;
@@ -78,7 +77,6 @@ class GlbLubTest {
     }
 
     void testGlb2() {
-        // ::error: (assignment.type.incompatible)
         MyClass2<? extends @AllowedAlgorithms("a") String> f2 = new MyClass2<>();
         @AllowedAlgorithms({"e"})
         String x = f2.key;
@@ -89,7 +87,6 @@ class GlbLubTest {
     }
 
     void testGlb3() {
-        // ::error: (assignment.type.incompatible)
         MyClass3<? extends @AllowedAlgorithms("a") String> f3 = new MyClass3<>();
         @AllowedAlgorithms({"b"})
         String x = f3.key;
